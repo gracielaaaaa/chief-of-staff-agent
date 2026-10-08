@@ -56,3 +56,7 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 - 8am run succeeded in 63 seconds: kill switch, Drive and label lookup, inbox scan; one recruiting blast correctly dropped (not on To/CC).
 - The agent flagged a conflict on its own: the routine prompt still said two steps were off while `config.json` had them on. Fixed by making the prompt defer to config.
 - Cursors now advance on quiet runs; timestamps come from the system clock, not the model (one was off by an hour).
+
+## v0.5.2 (2026-10-08): review doc renderer
+- The daily review doc is rendered by tested code (`jobs/lib/review.py`): fixed section order, flagged drafts first, HTML escaped, em dashes rejected. 40 unit tests.
+- Needs-reply eval: 10/10 on the synthetic set (a regression check after the real-mail false-positive fix, not an unbiased estimate).

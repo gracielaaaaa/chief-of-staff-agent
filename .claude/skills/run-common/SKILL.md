@@ -25,7 +25,7 @@ If any connector call fails with an auth, permission, or server error (not a gua
 4. If the failing connector is Calendar itself, write the failure into today's review doc header and end.
 
 ## Finish: the review queue
-If the run created or found anything Graciela should look at, update today's review doc `Chief of Staff/Review/Review YYYY-MM-DD` (create it if missing, Google Doc). Sections, in this order:
+If the run created or found anything Graciela should look at, update today's review doc `Chief of Staff/Review/Review YYYY-MM-DD`. Render it with `python3 -m jobs.lib.review '<json>'` (never hand-write the HTML): if the doc does not exist, create it from that HTML with Drive `create_file` (text/html); if it exists, read it, merge this run's items into the existing ones, and append the new items under the matching headings with the Docs connector. The popup title comes from `jobs.lib.review.counts`. Sections, in this order:
 - `Needs you` (questions and NEEDS_YOU items)
 - `Drafts to review` (link, recipient type, subject, `REVIEW BEFORE SENDING` flags first)
 - `Booked` (tasks and reminders with times)

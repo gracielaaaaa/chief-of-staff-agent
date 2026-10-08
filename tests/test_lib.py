@@ -2,7 +2,7 @@ import importlib.util
 import unittest
 from pathlib import Path
 
-from jobs.lib import canvas, dedupe, diff, learn, promises, slots
+from jobs.lib import canvas, dedupe, diff, learn, promises, review, slots
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("guardrail", ROOT / ".claude/hooks/guardrail.py")
@@ -220,6 +220,23 @@ class Promises(unittest.TestCase):
     def test_exclusions(self):
         self.assertTrue(promises.excluded(["recruiter@employer.example.com"], "Hi", ["employer.example.com"], []))
         self.assertFalse(promises.excluded(["pat@example.edu"], "Hi Pat", ["employer.example.com"], ["EmployerCo"]))
+
+
+class Review(unittest.TestCase):
+    def test_flagged_drafts_first_and_empty_sections_omitted(self):
+        doc = review.render("2026-10-08", {"drafts": [{"text": "Client: deck"}, {"text": "student thread", "flag": "student"}],
+                                           "booked": []})
+        self.assertLess(doc.index("student thread"), doc.index("Client: deck"))
+        self.assertNotIn("Booked", doc)
+
+    def test_escapes_and_rejects_em_dash(self):
+        self.assertIn("&lt;b&gt;", review.render("d", {"skipped": [{"text": "<b>x</b>"}]}))
+        with self.assertRaises(ValueError):
+            review.render("d", {"skipped": [{"text": "a \u2014 b"}]})
+
+    def test_popup_title(self):
+        self.assertEqual(review.counts({"drafts": [1, 2], "booked": [1], "needs_you": [1]}),
+                         "[Agent] 2 drafts, 1 booked, 1 question")
 
 
 class Dedupe(unittest.TestCase):
