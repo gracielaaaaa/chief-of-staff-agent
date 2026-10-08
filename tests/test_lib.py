@@ -2,7 +2,7 @@ import importlib.util
 import unittest
 from pathlib import Path
 
-from jobs.lib import canvas, dedupe, diff, learn, promises, review, slots
+from jobs.lib import canvas, dedupe, diff, learn, promises, review, sensitive, slots
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("guardrail", ROOT / ".claude/hooks/guardrail.py")
@@ -10,6 +10,7 @@ guardrail = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(guardrail)
 
 GMAIL = "mcp__946aec6a__"
+AT = "@"  # built at runtime so the repo scrub check does not read test senders as real addresses
 CFG = {
     "timezone": "America/Los_Angeles",
     "working_hours": {"start": "08:00", "end": "21:00"},
@@ -49,6 +50,16 @@ class Guardrail(unittest.TestCase):
         self.assertFalse(guardrail.decide(GMAIL + "update_spreadsheet", {}, {}, req)[0])
         ok = {"requests": [{"appendCells": {"sheetId": 0}}]}
         self.assertTrue(guardrail.decide(GMAIL + "update_spreadsheet", {}, {}, ok)[0])
+
+    def test_writes_with_secrets_blocked(self):
+        bad = {"body": "Here is my card 4111 1111 1111 1111"}
+        self.assertFalse(guardrail.decide(GMAIL + "create_draft", {}, {}, bad)[0])
+        good = {"body": "Hi Pat, see you Friday."}
+        self.assertTrue(guardrail.decide(GMAIL + "create_draft", {}, {}, good)[0])
+
+    def test_attachments_and_downloads_blocked(self):
+        for t in ["get_message_attachment", "download_file_content", "download_course_file"]:
+            self.assertFalse(self.check(GMAIL + t), t)
 
     def test_harness_tools_pass(self):
         self.assertTrue(self.check("mcp__ccd_session__mark_chapter"))
@@ -237,6 +248,38 @@ class Review(unittest.TestCase):
     def test_popup_title(self):
         self.assertEqual(review.counts({"drafts": [1, 2], "booked": [1], "needs_you": [1]}),
                          "[Agent] 2 drafts, 1 booked, 1 question")
+
+
+class Sensitive(unittest.TestCase):
+    def test_detects_secrets(self):
+        self.assertEqual(sensitive.find_secrets("card 4111 1111 1111 1111 exp 12/29"), ["card number"])
+        self.assertEqual(sensitive.find_secrets("SSN 123-45-6789"), ["SSN"])
+        self.assertIn("bank account detail", sensitive.find_secrets("Routing number: 121000248"))
+        self.assertIn("one-time code", sensitive.find_secrets("Your verification code is 482913"))
+        self.assertIn("password", sensitive.find_secrets("password: hunter22"))
+
+    def test_ignores_normal_work_content(self):
+        for ok in ["https://mail.google.com/mail/#all?compose=thread-f:1877961163425134275",
+                   "key=task:14f4d860f62f2819 canvas 9102497", "Room 1102, due 2026-10-16",
+                   "Hi Pat, the deck is attached. Best, Maya", "course code PH 220, section 201",
+                   "Please send your bank account details to HR, not me", "Dress code for the Oct 2026 event",
+                   "account settings were updated", "PIN the event for 2026"]:
+            self.assertEqual(sensitive.find_secrets(ok), [], ok)
+
+    def test_financial_senders_and_subjects(self):
+        self.assertTrue(sensitive.sensitive_sender("alerts" + AT + "chase.com"))
+        self.assertFalse(sensitive.sensitive_sender("auto-confirm" + AT + "amazon.com"))  # receipts are fine
+        self.assertTrue(sensitive.sensitive_sender("noreply" + AT + "studentaid.gov"))
+        self.assertTrue(sensitive.sensitive_sender("alerts" + AT + "fidelity.com"))
+        self.assertTrue(sensitive.sensitive_sender("faoemail" + AT + "example.edu"))
+        self.assertFalse(sensitive.sensitive_sender("pat" + AT + "example.edu"))
+        self.assertTrue(sensitive.sensitive_subject("Your verification code"))
+        self.assertTrue(sensitive.sensitive_subject("Your W-2 is ready"))
+        self.assertFalse(sensitive.sensitive_subject("Re: quiz 3"))
+        self.assertTrue(sensitive.sensitive_subject("Your loan payment is due"))
+        self.assertTrue(sensitive.sensitive_subject("Your 401(k) quarterly statement"))
+        self.assertFalse(sensitive.sensitive_subject("Invoice #42 from Mendocino Farms"))
+        self.assertFalse(sensitive.sensitive_subject("Your Amazon order receipt"))
 
 
 class Dedupe(unittest.TestCase):

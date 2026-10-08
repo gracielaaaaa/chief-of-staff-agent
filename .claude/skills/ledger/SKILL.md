@@ -13,7 +13,7 @@ Cursors in `_State` `meta`: `granola_last_ts`, `sent_last_ts`. **First run (no c
 4. Client meetings (Consulting lane): one recap draft via `drafter` (`kind: recap`), key `recap|<meeting id>`.
 
 ## B. Sent-mail promises
-1. Gmail search `in:sent after:<sent_last_ts>` (cap 50). Drop `jobs.lib.promises.is_automated` messages and `excluded` ones before any model call. Strip quoted history (`jobs.lib.diff.strip_quoted` semantics). Skip student threads for promise storage unless the promise is about a non-grade deliverable, and never store the student's name (`who = "student"`).
+1. Gmail search `in:sent after:<sent_last_ts>` (cap 50). Drop `jobs.lib.promises.is_automated` messages, `excluded` ones, and any to or from a `jobs.lib.sensitive.sensitive_sender` or with a sensitive subject, before any model call. Strip quoted history (`jobs.lib.diff.strip_quoted` semantics). Skip student threads for promise storage unless the promise is about a non-grade deliverable, and never store the student's name (`who = "student"`).
 2. `classifier` subagent, mode `promises`.
 3. Pass every item through `jobs.lib.promises.redact_who` (privacy backstop) and `triage` (past-due on first run becomes a `Needs you` confirmation, not a row). New Ledger rows, key `ledger|<message id>|<what>`, `source` = sent message link.
 4. Before adding a row, look for a later sent message in the same thread that fulfills it (for example the grades actually sent). If found, add it with `status=done` so the close rate counts it.

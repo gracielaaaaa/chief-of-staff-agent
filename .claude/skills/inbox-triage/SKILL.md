@@ -8,9 +8,10 @@ Runs after the dispatcher in the `capture` routine. Uses `run-common` (already s
 
 ## 1. Candidates (plain search, no model)
 - Cursor `inbox_last_ts` from `_State` `meta`. If missing (first run), use `newer_than:<config.inbox_triage.first_run_lookback>`; otherwise `after:<cursor as epoch seconds>`.
-- Gmail search: `config.inbox_triage.query` with label ids filled in, plus the time clause.
+- Gmail search: `config.inbox_triage.query` with label ids filled in, plus the time clause, plus `jobs.lib.sensitive.GMAIL_EXCLUDE`.
 - Gmail search does not reliably honor `-label:` with ids, so apply every filter below in code, on each thread's messages.
 - Drop a thread if any of these is true:
+  - the sender or subject is sensitive (`jobs.lib.sensitive.sensitive_sender` / `sensitive_subject`): banking, investments, loans, tax, payroll, login codes. Decide from metadata only; never open the body.
   - any message carries the `Agent/Inbox`, `Agent/Done`, or `Agent/Skipped` label (capture notes are the dispatcher's job)
   - the newest message is from one of her addresses (`My addresses` in Lane Context): she already answered
   - the sender matches `skip_sender_patterns`, or `config.exclusions`

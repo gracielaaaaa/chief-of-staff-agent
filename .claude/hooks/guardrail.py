@@ -13,11 +13,16 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+from jobs.lib.sensitive import find_secrets  # noqa: E402
 
 # Allow list, not block list: any connector tool not named here is blocked,
 # so newly attached connectors (or new tools on old ones) can't act by default.
 # Spec section 4, principle 1: drafts, never sends.
-READ = re.compile(r"^(get_.*|list_.*|search_.*|read_.*|query_.*|check_.*|download_file_content)$")
+READ = re.compile(r"^(get_.*|list_.*|search_.*|read_.*|query_.*|check_.*)$")
+
+# Attachments and file downloads are where statements, tax forms, and offer letters live.
+NEVER_READ = re.compile(r".*(attachment|download).*")
 
 # Writes the agent needs. Blocked in dry-run and when paused.
 WRITE = {
@@ -65,6 +70,11 @@ def decide(tool_name: str, env: dict, config: dict, tool_input=None) -> tuple[bo
     if HARNESS_SERVERS.match(tool_name):
         return True, ""
     suffix = tool_suffix(tool_name)
+    if NEVER_READ.match(suffix):
+        return False, (
+            f"BLOCKED by guardrail: '{suffix}' reads attachments or downloads files, which this "
+            "agent never does (financial and personal documents live there)."
+        )
     if not READ.match(suffix) and suffix not in WRITE:
         return False, (
             f"BLOCKED by guardrail: '{suffix}' is not on the allow list. This agent only "
@@ -77,6 +87,13 @@ def decide(tool_name: str, env: dict, config: dict, tool_input=None) -> tuple[bo
             "Mark ledger items status=dropped instead."
         )
     if suffix in WRITE:
+        secrets = find_secrets(json.dumps(tool_input or {}, ensure_ascii=False))
+        if secrets:
+            return False, (
+                f"BLOCKED by guardrail: this write contains what looks like a {', '.join(secrets)}. "
+                "Financial details and login credentials never go into drafts, sheets, docs, or events. "
+                "Skip that content, log 'skipped: sensitive', and continue."
+            )
         if truthy(env.get("DRY_RUN")) or config.get("dry_run"):
             return False, (
                 f"DRY RUN: '{suffix}' was not executed. Print the intended action "

@@ -64,3 +64,8 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 ## v0.5.3 (2026-10-08): recap fact-check
 - Recap acceptance test (5 past client meetings, offline): the drafter reported 30/30 action items covered. An independent fact-checker, confirmed by hand, found 1 open question listed as a task, 1 finding listed as a decision, 1 owner assigned without support, 1 date pulled from another meeting, 1 inferred time, and 1 attendee left off the To line. Self-reported coverage overstated quality.
 - Drafter now has explicit recap accuracy rules for each of those error types. Owner grading pending.
+
+## v0.6.0 (2026-10-08): financial and credential boundary
+- Owner's rule: receipts and invoices are fine; banking, investments, loans (plus tax and payroll, which carry SSNs) are never read. ADR 0007.
+- Four layers: Gmail search exclusions, metadata-only skip of sensitive senders and subjects, attachments and downloads blocked by the hook, and a secrets scan on every write (card numbers with Luhn check, SSNs, bank details, one-time codes, passwords).
+- False-positive checks: the write scan passes everything the agent has written so far (review doc, recaps, Canvas rows) and common phrases like "bank account details" or "dress code for Oct 2026". 45 unit tests.

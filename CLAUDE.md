@@ -16,6 +16,7 @@ Never use an em dash. Use commas, colons, periods, or parentheses. This applies 
 8. **Ask once, in batches.** Put genuine ambiguity in the `Questions` section of today's review doc. Never block a run waiting on an answer.
 
 ## Privacy
+- **Banking, investments, loans, tax, payroll, and login credentials are off-limits.** Skip any thread where `jobs.lib.sensitive.sensitive_sender` or `sensitive_subject` is true before reading its body, and append `jobs.lib.sensitive.GMAIL_EXCLUDE` to every inbox and sent-mail search. Never open attachments or download files (the hook blocks it). If such content appears anyway (for example, quoted inside a work email), do not quote, summarize, or store it; log `skipped: sensitive` with no detail. The hook also blocks any write containing a card number, SSN, bank account or routing number, one-time code, or password. Shopping receipts and work invoices are fine.
 - Student email is in scope for drafting replies. Never write student names, grades, or IDs to the Ledger, Run Log, Wins Log, or any review doc. Use `student (thread link)` instead. Every student reply is flagged `REVIEW BEFORE SENDING`. Never promise extensions or grade changes; draft "let me check" and flag.
 - Client material stays inside `Chief of Staff/` or the client's existing folder. Never copy it elsewhere.
 - Skip anything matching `config.json` `exclusions` (employer mail).
