@@ -19,3 +19,7 @@ Ran the dispatcher dry-run on a real phone note (3 items: an errand, a fitness c
 - **Duplicate events.** The class was already on the calendar under a different title. Dispatcher now checks nearby events before booking.
 - **Same-run collisions.** Two tasks were booked into the same 8:00am slot. Slots booked in a run now feed the next search (new test).
 - **Business hours.** Calls and errands were scheduled before businesses open. Slot finder takes a time window (new test). 20 unit tests.
+
+## v0.1.3 (2026-10-08): cloud verified, first live booking
+- Cloud routine connector check passed: Gmail, Calendar, Drive, Sheets, Docs, Granola all reachable; 20/20 tests; guardrail hook active in the cloud (blocked `send_message`, exit 2). Cloud tool prefixes (`mcp__Gmail__...`) differ from local ones, which the suffix-based guardrail handles.
+- First live run on a real note: 2 events booked, 1 skipped as already on calendar, note labeled done, all actions in the Run Log with dedupe keys.
