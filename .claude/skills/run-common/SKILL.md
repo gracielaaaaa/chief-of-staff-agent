@@ -9,7 +9,7 @@ description: Shared start and finish steps for every scheduled job (kill switch,
 2. **Kill switch.** If `paused: true`, stop. Otherwise search Gmail: `from:me subject:"PAUSE AGENT" newer_than:30d` and `from:me subject:"RESUME AGENT" newer_than:30d`. If the newest of these is a PAUSE, stop. When stopping, log `paused` (step 4) and do nothing else.
 3. **Resolve Drive objects by name, never hardcode IDs.** Search Drive for the folder titled `drive.root_folder_name` (`mimeType = 'application/vnd.google-apps.folder'`, `owner = 'me'`), then for each file in `drive.files` and each folder in `drive.folders` with `parentId` = that folder. If the root folder is missing, fail with "run the setup skill".
 4. **Resolve Gmail label ids.** Gmail search `label:` takes label ids, not names. Call `list_labels` once and map `Agent/Inbox`, `Agent/Done`, `Agent/Skipped` to their ids; use those ids in every query.
-5. **Run id** = `<job>-<UTC timestamp>`. Read `_State` tab `meta` for this job's last-run cursors.
+5. **Run id** = `<job>-<UTC timestamp>`. Get every timestamp from `date -u +%Y-%m-%dT%H:%M:%SZ`; never write one from memory. Read `_State` tab `meta` for this job's last-run cursors.
 
 ## Logging
 Append rows to `Run Log` tab `runs` with columns: `run_id, ts, job, step, source, action, object_id, dedupe_key, status, note`. Batch rows and append once per step, not once per call. Do not put student names, grades, or email bodies in `note`.

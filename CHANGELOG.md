@@ -51,3 +51,8 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 - Found that Granola participant lists can be incomplete (a client retreat listed only the owner), so the meeting filter also reads the notes.
 - Ledger live: 8 rows from the first run (6 open, 2 auto-closed because the matching sent mail already existed), 4 work blocks, 1 reminder, 1 flagged student draft.
 - Scheduling fixes found while booking: earliest-fit packed four tasks into one morning (now searches a 3-day lead window before each deadline), and Google marks focus time as "free" (her focus blocks now count as busy). 39 unit tests.
+
+## v0.5.1 (2026-10-08): first scheduled cloud run
+- 8am run succeeded in 63 seconds: kill switch, Drive and label lookup, inbox scan; one recruiting blast correctly dropped (not on To/CC).
+- The agent flagged a conflict on its own: the routine prompt still said two steps were off while `config.json` had them on. Fixed by making the prompt defer to config.
+- Cursors now advance on quiet runs; timestamps come from the system clock, not the model (one was off by an hour).
