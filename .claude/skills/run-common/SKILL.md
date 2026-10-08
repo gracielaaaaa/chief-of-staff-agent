@@ -33,4 +33,4 @@ If the run created or found anything Graciela should look at, update today's rev
 - `Skipped` (notes from non-self senders, excluded items, with a reason)
 Then create or update one calendar popup for the run: title `[Agent] <n> drafts, <n> booked, <n> questions`, 5 min at the next free 5-minute mark within working hours (or 8:00 next morning if outside), transparent, 0 min popup, description = review doc link. Dedupe key `popup|<run_id>`.
 
-Write `meta` cursors last, only after everything else succeeded, so a failed run is retried next time.
+Write `meta` cursors last, only after everything else succeeded, so a failed run is retried next time. **Advance cursors on quiet runs too** (nothing new is still a success); otherwise every run re-reads the same threads. Update the existing `meta` row for a key (find its row with `get_values`) instead of appending a duplicate.
