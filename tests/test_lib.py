@@ -2,7 +2,7 @@ import importlib.util
 import unittest
 from pathlib import Path
 
-from jobs.lib import dedupe, diff, slots
+from jobs.lib import canvas, dedupe, diff, slots
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("guardrail", ROOT / ".claude/hooks/guardrail.py")
@@ -118,6 +118,26 @@ class Slots(unittest.TestCase):
 
     def test_no_slot_before_deadline(self):
         self.assertIsNone(slots.find_slot("2026-10-08T20:45:00-07:00", "2026-10-08T23:00:00-07:00", 60, [], CFG))
+
+
+class Canvas(unittest.TestCase):
+    def test_utc_due_is_previous_evening_pacific(self):
+        d = canvas.due_local("2026-10-13T06:59:00Z")
+        self.assertEqual((d.month, d.day, d.hour, d.minute), (10, 12, 23, 59))
+
+    def test_reminder_lands_at_9am_two_days_before(self):
+        self.assertEqual(canvas.reminder_at("2026-10-13T06:59:00Z").isoformat(), "2026-10-10T09:00:00-07:00")
+
+    def test_after_dst_ends(self):
+        # Nov 10 07:59Z is Nov 9 11:59pm PST (UTC-8)
+        d = canvas.due_local("2026-11-10T07:59:59Z")
+        self.assertEqual((d.day, d.hour, d.utcoffset().total_seconds()), (9, 23, -8 * 3600))
+
+    def test_html_cleaned(self):
+        raw = ('<<<UNTRUSTED CANVAS CONTENT (x)>>><link rel="stylesheet" href="a.css"><ul><li>What is '
+               '<i>cisnormativity</i>?&nbsp;</li><li>Second</li></ul><p><strong>When replying to peers, '
+               'we encourage you to use the @ feature to tag</strong></p><script>x()</script>')
+        self.assertEqual(canvas.html_to_text(raw), "- What is cisnormativity?\n- Second")
 
 
 class Dedupe(unittest.TestCase):
