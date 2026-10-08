@@ -245,6 +245,10 @@ class Review(unittest.TestCase):
         with self.assertRaises(ValueError):
             review.render("d", {"skipped": [{"text": "a \u2014 b"}]})
 
+    def test_text_block_for_append(self):
+        txt = review.render_text("12:02", {"drafts": [{"text": "a"}, {"text": "b", "flag": "student"}], "booked": []})
+        self.assertEqual(txt, "\nRun 12:02\nDrafts to review\n- REVIEW BEFORE SENDING (student): b\n- a\n")
+
     def test_popup_title(self):
         self.assertEqual(review.counts({"drafts": [1, 2], "booked": [1], "needs_you": [1]}),
                          "[Agent] 2 drafts, 1 booked, 1 question")

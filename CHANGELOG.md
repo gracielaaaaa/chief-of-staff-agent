@@ -69,3 +69,8 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 - Owner's rule: receipts and invoices are fine; banking, investments, loans (plus tax and payroll, which carry SSNs) are never read. ADR 0007.
 - Four layers: Gmail search exclusions, metadata-only skip of sensitive senders and subjects, attachments and downloads blocked by the hook, and a secrets scan on every write (card numbers with Luhn check, SSNs, bank details, one-time codes, passwords).
 - False-positive checks: the write scan passes everything the agent has written so far (review doc, recaps, Canvas rows) and common phrases like "bank account details" or "dress code for Oct 2026". 45 unit tests.
+
+## v0.6.1 (2026-10-08): noon run fixes
+- First full capture run with every step on: 3 notes (1 skipped as sensitive), 4 events, Forum 8 outline, 2 reply drafts, 1 waiting-on item, review doc, popup.
+- Fixed: label searches use names (ids silently return nothing); review doc is appended to, never read back. 46 unit tests.
+- Watching: the run ended before finishing the Granola and sent-mail scans (it left those cursors in place, so the next run retries).
