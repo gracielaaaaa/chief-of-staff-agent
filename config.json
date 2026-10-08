@@ -10,11 +10,16 @@
     "calendar_ids": [
       "primary"
     ],
-    "color_ids": [],
+    "color_ids": [
+      "3",
+      "5",
+      "7",
+      "9"
+    ],
     "color_names": [
-      "blue",
-      "purple",
-      "yellow"
+      "Grape (purple): classes",
+      "Banana (yellow): GSI and reader work",
+      "Peacock, Blueberry (blue)"
     ],
     "weekly_blocks": [
       {
