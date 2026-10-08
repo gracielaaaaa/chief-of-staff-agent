@@ -1,0 +1,13 @@
+{
+  "should_learn": [
+    {"id": "no_pleasantry_opener", "pattern": "drops 'I hope this finds you well' / gets to the point in line one", "evidence": ["e01", "e02", "e03"]},
+    {"id": "client_signoff_best", "pattern": "signs client emails 'Best,' not 'Best regards,'", "evidence": ["e01", "e02", "e08"]},
+    {"id": "bullets_for_multiple_asks", "pattern": "uses bullets when there are 3+ asks", "evidence": ["e01", "e03"]},
+    {"id": "shorter_warmth", "pattern": "cuts effusive thanks and filler ('so much', 'really appreciated', 'completely understand')", "evidence": ["e04", "e07", "e08"]},
+    {"id": "contractions", "pattern": "uses contractions (I'll) and plain phrasing", "evidence": ["e04", "e07", "e08"]}
+  ],
+  "should_not_learn": [
+    {"id": "check_fill", "pattern": "filling a [CHECK: ...] placeholder is not a style rule", "evidence": ["e05"]},
+    {"id": "fact_fix", "pattern": "correcting a wrong date is a factual fix, not a style rule", "evidence": ["e06"]}
+  ]
+}

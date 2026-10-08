@@ -39,3 +39,8 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 - First sync: 11 items across 4 courses, 10 not submitted.
 - Per-course AI policy (kept in the private Lane Context doc): AI courses get full drafts, all other graded work gets outlines. Large technical projects are routed to a dedicated build session instead of the scheduled agent.
 - Course step turned on for cloud runs after the first live run: 5 digest popups, 1 outline, 2 work blocks.
+
+## v0.4.0 (2026-10-08): learn routine
+- Edit ratio ignores the agent's own `REVIEW BEFORE SENDING` line (deleting it was being counted as an edit).
+- Tested helpers for weekly metrics, 7-day rejection, and rule activation (2+ sightings or owner confirmation). 31 unit tests.
+- Edit-learner eval on 8 synthetic pairs: v0 found 5/5 planted habits but invented 1 false rule and 12 rules total; v1 (prompt excludes placeholder fills and fact fixes, one idea per rule) found 4/5 with 0 false rules. Shipped v1: precision over recall for rules that change every future draft.

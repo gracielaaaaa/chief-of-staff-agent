@@ -26,7 +26,13 @@ def strip_quoted(body: str) -> str:
     return "\n".join(lines).strip()
 
 
+_FLAG_LINE = re.compile(r"^REVIEW BEFORE SENDING.*$\n?", re.M)
+
+
 def normalize(body: str) -> str:
+    """The agent's own review flag line is an instruction to Graciela, not part of the
+    email, so deleting it is not an edit."""
+    body = _FLAG_LINE.sub("", body)
     body = strip_quoted(body)
     body = body.replace("\r\n", "\n")
     body = re.sub(r"[ \t]+", " ", body)

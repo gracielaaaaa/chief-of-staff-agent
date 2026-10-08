@@ -2,7 +2,7 @@ import importlib.util
 import unittest
 from pathlib import Path
 
-from jobs.lib import canvas, dedupe, diff, slots
+from jobs.lib import canvas, dedupe, diff, learn, slots
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("guardrail", ROOT / ".claude/hooks/guardrail.py")
@@ -69,6 +69,10 @@ class Diff(unittest.TestCase):
         sent = ("Thanks, will do.\n\nOn Tue, Oct 6, 2026 at 11:33 PM Pat Example <\n"
                 "pat@example.edu> wrote:\n\n> long history\n> more")
         self.assertEqual(diff.strip_quoted(sent), "Thanks, will do.")
+
+    def test_review_flag_line_is_not_an_edit(self):
+        draft = "REVIEW BEFORE SENDING (instructor). Delete this line.\n\nHi Pat,\n\nYes, will do.\n\nBest,\nG"
+        self.assertEqual(diff.edit_ratio(draft, "Hi Pat,\n\nYes, will do.\n\nBest,\nG"), 0.0)
 
     def test_heavy_rewrite_is_high(self):
         self.assertGreater(diff.edit_ratio("I hope this finds you well. Here is the doc.", "Doc attached."), 0.5)
@@ -149,6 +153,32 @@ class Canvas(unittest.TestCase):
                '<i>cisnormativity</i>?&nbsp;</li><li>Second</li></ul><p><strong>When replying to peers, '
                'we encourage you to use the @ feature to tag</strong></p><script>x()</script>')
         self.assertEqual(canvas.html_to_text(raw), "- What is cisnormativity?\n- Second")
+
+
+class Learn(unittest.TestCase):
+    def test_weekly_metrics(self):
+        rows = [
+            {"created": "2026-10-08T05:40:00Z", "status": "sent", "edit_ratio": "0.10"},
+            {"created": "2026-10-08T06:00:00Z", "status": "sent", "edit_ratio": "0.30"},
+            {"created": "2026-10-09T06:00:00Z", "status": "rejected", "edit_ratio": ""},
+            {"created": "2026-10-13T06:00:00Z", "status": "open", "edit_ratio": ""},
+        ]
+        m = learn.weekly_metrics(rows)
+        self.assertEqual(m["2026-W41"], {"drafts": 3, "sent": 2, "rejected": 1,
+                                         "avg_edit_ratio": 0.2, "light_edit_share": 0.5})
+        self.assertIsNone(m["2026-W42"]["avg_edit_ratio"])
+
+    def test_rejected_after_7_days(self):
+        d = {"status": "open", "created": "2026-10-08T05:40:00Z"}
+        self.assertFalse(learn.is_rejected(d, "2026-10-14T05:39:00Z"))
+        self.assertTrue(learn.is_rejected(d, "2026-10-15T05:40:00Z"))
+
+    def test_activation_threshold_or_confirmation(self):
+        obs = [{"id": "r1", "status": "candidate", "evidence_count": 2},
+               {"id": "r2", "status": "candidate", "evidence_count": 1},
+               {"id": "r3", "status": "candidate", "evidence_count": 1, "confirmed": "yes"},
+               {"id": "r4", "status": "active", "evidence_count": 5}]
+        self.assertEqual(learn.activations(obs), ["r1", "r3"])
 
 
 class Dedupe(unittest.TestCase):
