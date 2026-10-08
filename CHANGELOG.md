@@ -74,3 +74,6 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 - First full capture run with every step on: 3 notes (1 skipped as sensitive), 4 events, Forum 8 outline, 2 reply drafts, 1 waiting-on item, review doc, popup.
 - Fixed: label searches use names (ids silently return nothing); review doc is appended to, never read back. 46 unit tests.
 - Watching: the run ended before finishing the Granola and sent-mail scans (it left those cursors in place, so the next run retries).
+
+## v0.6.2 (2026-10-08): financial errands are tasks
+- Owner feedback: a to-do about calling Vanguard and logging in to an HSA was skipped as sensitive. The boundary is account data, not the topic. Errands are booked; only notes containing account data (secrets scan) or forwarded financial emails are skipped. 47 unit tests.

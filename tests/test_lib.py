@@ -270,6 +270,10 @@ class Sensitive(unittest.TestCase):
                    "account settings were updated", "PIN the event for 2026"]:
             self.assertEqual(sensitive.find_secrets(ok), [], ok)
 
+    def test_financial_errand_note_has_no_secrets(self):
+        note = "Need to log in to my hsa\nneed to transfer my 401k and roll over to vanguard, put a 30 min block next week"
+        self.assertEqual(sensitive.find_secrets(note), [])
+
     def test_financial_senders_and_subjects(self):
         self.assertTrue(sensitive.sensitive_sender("alerts" + AT + "chase.com"))
         self.assertFalse(sensitive.sensitive_sender("auto-confirm" + AT + "amazon.com"))  # receipts are fine
