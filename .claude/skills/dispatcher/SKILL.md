@@ -37,12 +37,17 @@ Group items (more than one teammate): one email draft to all teammates, plus a R
 Apply `Agent/Done` to the source message only after every item from it succeeded. A partial failure leaves it unlabeled so the next run retries (dedupe keys prevent duplicates).
 
 ## 6. Course deadlines
+Skip unless `config.steps.course_deadlines`.
 Read `Courses/` sync files (see `canvas-sync`). If the newest `synced_at` is older than `canvas_sync_stale_days`, add `Canvas sync is stale` to `Needs you`. For each graded item due in the next 14 days:
 - 48 h reminder (key `course48|<course>|<assignment id>`).
 - Discussion posts: hand to `drafter` as a deliverable (Google Doc in `Courses/<course>/Drafts/`). For two-level discussions, book two TASK blocks, the first post block and a reply block 1 to 2 days later.
 - Group deadlines: `Status check` reminder 2 days before.
 
-## 7. Ledger step
+## 7. Inbox triage
+If `config.steps.inbox_triage`, run the `inbox-triage` skill (draft replies to real people who are waiting on her).
+
+## 8. Ledger step
+Skip unless `config.steps.ledger`.
 Run the `ledger` skill (Granola recaps, sent-mail promises, auto-close).
 
 Finish with `run-common` Finish.

@@ -23,3 +23,10 @@ Ran the dispatcher dry-run on a real phone note (3 items: an errand, a fitness c
 ## v0.1.3 (2026-10-08): cloud verified, first live booking
 - Cloud routine connector check passed: Gmail, Calendar, Drive, Sheets, Docs, Granola all reachable; 20/20 tests; guardrail hook active in the cloud (blocked `send_message`, exit 2). Cloud tool prefixes (`mcp__Gmail__...`) differ from local ones, which the suffix-based guardrail handles.
 - First live run on a real note: 2 events booked, 1 skipped as already on calendar, note labeled done, all actions in the Run Log with dedupe keys.
+
+## v0.2.0 (2026-10-08): inbox triage (needs-reply drafts)
+Pulled forward from Phase 2 at the owner's request: the agent scans the inbox and drafts replies to real people who are waiting on her.
+- First live run: 9 threads, 7 after code filters, 3 flagged by Haiku as needing a reply, 2 drafted (student accommodation question, instructor follow-up), 1 skipped as a probable false positive ("let's discuss after class").
+- Fixes from the run: Gmail ignores `-label:` with ids in search, so filters run in code; wrapped "On ... wrote:" attributions are now stripped (a 40KB thread became 3 lines); accommodation and health requests get a dedicated never-decide rule; student names are redacted in the learning log.
+- New eval set `evals/needs_reply.jsonl` (10 cases, synthetic, includes the false-positive pattern).
+- Step flags in config: course deadlines and ledger stay off until their own dry runs pass.

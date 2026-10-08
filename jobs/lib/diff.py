@@ -8,7 +8,8 @@ import json
 from difflib import SequenceMatcher
 
 _QUOTE_MARKERS = (
-    re.compile(r"^On .+ wrote:\s*$", re.M),
+    # Gmail wraps long attributions: "On Tue, Oct 6, 2026 at 11:33 PM Name <\nemail> wrote:"
+    re.compile(r"^On [^\n]{0,200}(?:\n[^\n]{0,200}){0,2}?wrote:\s*$", re.M),
     re.compile(r"^-+ ?Original Message ?-+", re.M | re.I),
     re.compile(r"^From: .+$", re.M),
 )

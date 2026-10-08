@@ -1,0 +1,10 @@
+{"id": "r01", "thread": "Instructor -> co-GSI (cc Maya): thanks for sharing the lesson plan, keep sharing these with each other, I'll visit sections soon.", "expected": false}
+{"id": "r02", "thread": "Student -> Maya: I have DSP accommodations for exams. Do they apply to in-class quizzes? Could I use a read-aloud tool?", "expected": true}
+{"id": "r03", "thread": "Maya told professor the student isn't on her roster. Professor: my mistake, I'll sign them in. Student -> professor (cc Maya): Ok, thank you!", "expected": false}
+{"id": "r04", "thread": "Instructor -> Maya (cc GSIs): Thanks, just making sure Maya is sending lecture absences to the GSIs each week.", "expected": true}
+{"id": "r05", "thread": "Co-GSI -> instructor (cc Maya): I can confirm I covered the same in section.", "expected": false}
+{"id": "r06", "thread": "Maya asked professor for edit access to a form. Professor -> Maya: I think I already did. Let's discuss after class.", "expected": false}
+{"id": "r07", "thread": "Enrollment office -> Maya: You are #6 on the waitlist; little movement expected.", "expected": false}
+{"id": "r08", "thread": "Client (Northwind) -> Maya: Can you send the updated landscape doc before Thursday's call?", "expected": true}
+{"id": "r09", "thread": "Teammate -> group (Maya on To): Who can take the methods section? Need answers by tonight.", "expected": true}
+{"id": "r10", "thread": "Newsletter from campus career center: 5 events this week.", "expected": false}

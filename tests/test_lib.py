@@ -65,6 +65,11 @@ class Diff(unittest.TestCase):
         sent = "Hi Priya,\n\nAttached.\n\nOn Mon, Oct 5, 2026 at 9:00 AM Priya wrote:\n> old stuff"
         self.assertEqual(diff.edit_ratio("Hi Priya,\n\nAttached.", sent), 0.0)
 
+    def test_wrapped_attribution_stripped(self):
+        sent = ("Thanks, will do.\n\nOn Tue, Oct 6, 2026 at 11:33 PM Pat Example <\n"
+                "pat@example.edu> wrote:\n\n> long history\n> more")
+        self.assertEqual(diff.strip_quoted(sent), "Thanks, will do.")
+
     def test_heavy_rewrite_is_high(self):
         self.assertGreater(diff.edit_ratio("I hope this finds you well. Here is the doc.", "Doc attached."), 0.5)
 

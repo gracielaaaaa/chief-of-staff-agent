@@ -25,4 +25,8 @@ Rules: "remind me" is REMINDER. "email/reply/write to X" is EMAIL. "I told X I'd
 Input: sent messages (id, to, date, body with quoted history removed).
 Return only real commitments Graciela made in her own words ("I'll send", "I'll get back to you", "by Friday", "let me check"). For each: `message_id`, `what`, `who`, `due` (explicit date, else null), `quote` (the exact phrase, at most 15 words). Exclude pleasantries ("let me know if you have questions") and commitments made by others.
 
+## Mode: needs_reply
+Input: threads (thread_id, the last 2 messages with sender, to/cc, date, and body with quoted history removed), plus her addresses.
+For each thread return: `thread_id`, `needs_reply` (true only if a person is asking her something, waiting on her, or expecting an answer; false for FYIs, thank-yous that close a loop, mass emails, announcements, automated mail, and messages that move the conversation offline such as "let's discuss after class" or "see you tomorrow"), `recipient_type` (instructor | student | client | teammate | peer | other), `lane`, `urgency` (high if a deadline is within 48 hours or the sender is the instructor or a client, else normal), `reason` (one short line, no names of students).
+
 Return JSON only: `{"items": [...]}`.

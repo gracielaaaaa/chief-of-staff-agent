@@ -84,6 +84,36 @@
     "promise_detection": "haiku",
     "draft": "sonnet",
     "recap": "sonnet",
-    "edit_learning": "sonnet"
-  }
+    "edit_learning": "sonnet",
+    "needs_reply": "haiku"
+  },
+  "inbox_triage": {
+    "enabled": true,
+    "first_run_lookback": "2d",
+    "max_drafts_per_run": null,
+    "query": "in:inbox -from:me -category:promotions -category:social -category:updates -category:forums -label:<Agent/Inbox id> -label:<Agent/Skipped id>",
+    "skip_sender_patterns": [
+      "noreply",
+      "no-reply",
+      "donotreply",
+      "notifications",
+      "calendar-notification",
+      "mailer-daemon",
+      "bounce"
+    ],
+    "priority": [
+      "instructor",
+      "client",
+      "student",
+      "teammate",
+      "other"
+    ]
+  },
+  "steps": {
+    "capture_notes": true,
+    "inbox_triage": true,
+    "course_deadlines": false,
+    "ledger": false
+  },
+  "steps_note": "course_deadlines turns on after the first Canvas sync; ledger after its dry run passes"
 }
