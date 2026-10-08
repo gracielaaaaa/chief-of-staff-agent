@@ -1,0 +1,31 @@
+---
+name: drafter
+description: F2 draft-first engine. Turns an EMAIL item, recap, or deliverable into a complete Gmail draft or Google Doc, logs it for edit learning, and applies review flags. Called by dispatcher and ledger.
+---
+# Drafter
+
+Input from the caller: `{what, who, lane, client_or_course, due, source_message_id?, thread_id?, kind: email|recap|deliverable, dedupe_key}`.
+
+## 1. Gather context (trim hard)
+- Thread: if replying, the last 3 messages of the thread, quoted history removed.
+- Recipient: find the address from her mail history (`to:` or `from:` the person's name, last 12 months). If more than one plausible address, or none, leave `to` empty and add `[CHECK: recipient]`.
+- Meetings: the latest Granola meeting with this person (notes + summary; transcript only if a needed detail is missing, capped at `transcript_char_cap`).
+- Ledger: open items with this person, both directions.
+- Drive: only for deliverables, the 1 to 3 most relevant files by title search in the client or course folder.
+- Lane Context section for this lane, and active Style Guide rules for global, this lane, and this recipient.
+
+## 2. Draft
+Call the `drafter` subagent. Then check its output yourself: no em dashes (replace with a comma, colon, or period), no unfilled placeholders except `[CHECK: ...]`.
+
+## 3. Flag
+Set `REVIEW BEFORE SENDING` (first line of the body, plus the review doc) when the recipient is the course instructor or a student, or the topic touches rates, contracts, scope, extensions, or grades, or the subagent set `review_flag`.
+
+## 4. Write
+- **Email**: Gmail `create_draft` with `replyToMessageId` when replying (keeps it in-thread), else a new draft. Never `send_message`, `reply`, or `forward` (blocked anyway).
+- **Deliverable**: a Google Doc in the client folder or `Courses/<course>/Drafts/`. If the work is more than about 60 minutes, outline it as 30 to 60 min chunks, fully draft chunk 1 in the doc, and book one TASK per chunk before the due date (through the dispatcher TASK rules).
+- **Recap** (after a client meeting): email draft to the external attendees: thanks (one line), decisions, action items as bullets with owner and date, next meeting.
+
+## 5. Log for learning
+Append to `_State` tab `drafts`: `draft_id, message_id, thread_id, to, recipient_type (client|student|instructor|teammate|other), subject, body, created, lane, flags, status=open`. For students, `to` is stored but no name goes into `subject` logs in the Run Log or review doc.
+
+Return `{draft_id, link, flagged}` to the caller.

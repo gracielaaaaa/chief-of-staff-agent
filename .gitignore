@@ -1,0 +1,10 @@
+# Real data never goes in git (public repo). See docs/decisions/0006-public-repo-privacy.md
+SPEC.md
+private/
+state/
+.claude/settings.local.json
+evals/real/
+.DS_Store
+__pycache__/
+*.pyc
+.pytest_cache/

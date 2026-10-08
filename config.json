@@ -1,0 +1,84 @@
+{
+  "paused": false,
+  "dry_run": false,
+  "timezone": "America/Los_Angeles",
+  "working_hours": {
+    "start": "08:00",
+    "end": "21:00"
+  },
+  "protected": {
+    "calendar_ids": [
+      "primary"
+    ],
+    "color_ids": [],
+    "color_names": [
+      "blue",
+      "purple",
+      "yellow"
+    ],
+    "weekly_blocks": [
+      {
+        "day": "TUE",
+        "start": "14:30",
+        "end": "15:30",
+        "label": "Office hours"
+      }
+    ]
+  },
+  "capture": {
+    "address_suffix": "+inbox",
+    "label": "Inbox/Agent",
+    "done_label": "Agent/Done",
+    "pause_subject": "PAUSE AGENT",
+    "accept_from": "self"
+  },
+  "drive": {
+    "root_folder_name": "Chief of Staff",
+    "files": {
+      "ledger": "Ledger",
+      "run_log": "Run Log",
+      "state": "_State",
+      "look_into_later": "Look Into Later",
+      "style_guide": "Style Guide",
+      "lane_context": "Lane Context"
+    },
+    "folders": [
+      "Courses",
+      "Briefs",
+      "Review"
+    ]
+  },
+  "defaults": {
+    "i_owe_due_business_days": 3,
+    "task_durations_min": [
+      15,
+      30,
+      60,
+      90
+    ],
+    "reminder_minutes": 10,
+    "chunk_minutes": [
+      30,
+      60
+    ],
+    "draft_rejected_after_days": 7,
+    "style_rule_activation_count": 2,
+    "transcript_char_cap": 30000,
+    "canvas_sync_stale_days": 8
+  },
+  "exclusions": {
+    "sender_domains": [
+      "servicenow.com"
+    ],
+    "keywords": [
+      "ServiceNow"
+    ]
+  },
+  "models": {
+    "classify": "haiku",
+    "promise_detection": "haiku",
+    "draft": "sonnet",
+    "recap": "sonnet",
+    "edit_learning": "sonnet"
+  }
+}
