@@ -133,6 +133,17 @@ class Canvas(unittest.TestCase):
         d = canvas.due_local("2026-11-10T07:59:59Z")
         self.assertEqual((d.day, d.hour, d.utcoffset().total_seconds()), (9, 23, -8 * 3600))
 
+    def test_daily_digest_groups_and_skips_submitted(self):
+        items = [
+            {"title": "A", "due_utc": "2026-10-20T06:59:59Z", "status": "not submitted"},
+            {"title": "B", "due_utc": "2026-10-20T06:59:59Z", "status": "not submitted"},
+            {"title": "C", "due_utc": "2026-10-13T06:59:00Z", "status": "not submitted"},
+            {"title": "D", "due_utc": "2026-10-13T06:59:00Z", "status": "submitted"},
+        ]
+        d = canvas.daily_digests(items)
+        self.assertEqual([x["at"][:10] for x in d], ["2026-10-10", "2026-10-17"])
+        self.assertEqual([i["title"] for i in d[1]["items"]], ["A", "B"])
+
     def test_html_cleaned(self):
         raw = ('<<<UNTRUSTED CANVAS CONTENT (x)>>><link rel="stylesheet" href="a.css"><ul><li>What is '
                '<i>cisnormativity</i>?&nbsp;</li><li>Second</li></ul><p><strong>When replying to peers, '

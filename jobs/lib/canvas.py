@@ -53,3 +53,18 @@ if __name__ == "__main__":
                           "reminder_48h": reminder_at(arg).isoformat()}))
     elif cmd == "text":
         print(html_to_text(arg))
+
+
+def daily_digests(items, hours_before: int = 48, at: time = time(9, 0)):
+    """Group not-submitted graded items into one reminder per day.
+
+    items: dicts with title, course, due_utc, status, link (rows of Courses/Upcoming).
+    Returns [{"at": iso, "items": [...]}] sorted by time, one entry per day.
+    """
+    days = {}
+    for it in items:
+        if it.get("status") == "submitted":
+            continue
+        when = reminder_at(it["due_utc"], hours_before, at)
+        days.setdefault(when, []).append(it)
+    return [{"at": k.isoformat(), "items": sorted(v, key=lambda i: i["due_utc"])} for k, v in sorted(days.items())]

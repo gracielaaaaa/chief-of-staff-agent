@@ -38,10 +38,10 @@ Apply `Agent/Done` to the source message only after every item from it succeeded
 
 ## 6. Course deadlines
 Skip unless `config.steps.course_deadlines`.
-Read `Courses/` sync files (see `canvas-sync`). If the newest `synced_at` is older than `canvas_sync_stale_days`, add `Canvas sync is stale` to `Needs you`. For each graded item due in the next 14 days:
-- 48 h reminder (key `course48|<course>|<assignment id>`).
-- Discussion posts: hand to `drafter` as a deliverable (Google Doc in `Courses/<course>/Drafts/`). For two-level discussions, book two TASK blocks, the first post block and a reply block 1 to 2 days later.
-- Group deadlines: `Status check` reminder 2 days before.
+Read the `Courses/Upcoming` sheet, rows with the newest `synced_at`. If `_State` `meta` `canvas_last_sync` is older than `canvas_sync_stale_days`, add `Canvas sync is stale (run it from the laptop)` to `Needs you`.
+- **Daily digest reminders.** Run `jobs.lib.canvas.daily_digests` on the not-submitted rows. For each day, one 10 min transparent event at 9:00am titled `[School] Due within 48h: <n> items`, popup at 0 min, description = one line per item (`course: title, due <due_local>, <link>`). Key `digest|<date>`. If the event already exists (same key), update its description instead of creating another.
+- **Discussion posts** (`type=discussion`): an **outline, never a full post** (graded coursework; see the school-lane skill). Create a Google Doc `Courses/<course>/<title> - outline` with: each prompt question as a heading, the readings it cites, 2 or 3 angles she could take, and `[your example]` slots. Then book a 60 min `[School] <course>: write <forum> post` block that ends at least 2 days before the due date, and a 30 min `[School] <course>: reply to 2 peers` block at least 1 day after the post block and before the due date. Both link the outline doc. Keys `outline|<assignment id>`, `post|<assignment id>`, `reply|<assignment id>`.
+- **Group deadlines** (`group` set): `Status check` reminder 2 days before, plus one email draft to all teammates.
 
 ## 7. Inbox triage
 If `config.steps.inbox_triage`, run the `inbox-triage` skill (draft replies to real people who are waiting on her).
