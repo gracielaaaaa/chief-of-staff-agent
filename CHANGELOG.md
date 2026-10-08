@@ -42,7 +42,7 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 
 ## v0.4.0 (2026-10-08): learn routine
 - Edit ratio ignores the agent's own `REVIEW BEFORE SENDING` line (deleting it was being counted as an edit).
-- Tested helpers for weekly metrics, 7-day rejection, and rule activation (2+ sightings or owner confirmation). 31 unit tests.
+- Tested helpers for weekly metrics, 7-day rejection, and rule activation (2+ sightings or owner confirmation). 30 unit tests.
 - Edit-learner eval on 8 synthetic pairs: v0 found 5/5 planted habits but invented 1 false rule and 12 rules total; v1 (prompt excludes placeholder fills and fact fixes, one idea per rule) found 4/5 with 0 false rules. Shipped v1: precision over recall for rules that change every future draft.
 
 ## v0.5.0 (2026-10-08): ledger dry run on real meetings and sent mail
@@ -50,7 +50,7 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 - Code prefilter drops automated sent mail (18 of 67 messages) before any model call; code backstop redacts student names; first-run backlog limited to 7 days with past-due items turned into one confirmation question.
 - Found that Granola participant lists can be incomplete (a client retreat listed only the owner), so the meeting filter also reads the notes.
 - Ledger live: 8 rows from the first run (6 open, 2 auto-closed because the matching sent mail already existed), 4 work blocks, 1 reminder, 1 flagged student draft.
-- Scheduling fixes found while booking: earliest-fit packed four tasks into one morning (now searches a 3-day lead window before each deadline), and Google marks focus time as "free" (her focus blocks now count as busy). 39 unit tests.
+- Scheduling fixes found while booking: earliest-fit packed four tasks into one morning (now searches a 3-day lead window before each deadline), and Google marks focus time as "free" (her focus blocks now count as busy). 37 unit tests.
 
 ## v0.5.1 (2026-10-08): first scheduled cloud run
 - 8am run succeeded in 63 seconds: kill switch, Drive and label lookup, inbox scan; one recruiting blast correctly dropped (not on To/CC).

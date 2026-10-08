@@ -2,7 +2,7 @@
 
 | Routine | Schedule (Pacific) | Cron (UTC) | Connectors | Status |
 |---|---|---|---|---|
-| capture | 8am, 12pm, 5pm, 9pm | `0 0,4,15,19 * * *` | Gmail, Calendar, Drive, Sheets, Docs | live since 2026-10-08 |
+| capture | 8am, 12pm, 5pm, 9pm | `0 0,4,15,19 * * *` | Gmail, Calendar, Drive, Sheets, Docs, Granola | live since 2026-10-08 |
 | learn (edit-learner) | 10pm daily | `0 5 * * *` | Gmail, Drive, Sheets, Docs | live since 2026-10-08 |
 | canvas-sync | Sundays (local laptop task) | n/a | Canvas, Drive, Docs | not yet created |
 
