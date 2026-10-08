@@ -38,12 +38,12 @@ def _round_up(dt: datetime) -> datetime:
 
 
 def busy_intervals(events, protected_colors, tz):
-    """Opaque events block time. Protected colors block time even if marked free.
-    All-day events (date only) are ignored unless protected."""
+    """Opaque events block time. Protected colors and her own focus-time blocks block
+    time even if marked free. All-day events (date only) are ignored unless protected."""
     out = []
     for ev in events:
         color = str(ev.get("colorId") or "")
-        protected = color in protected_colors
+        protected = color in protected_colors or ev.get("eventType") == "FOCUS_TIME"
         if ev.get("transparency") == "transparent" and not protected:
             continue
         start, end = ev.get("start"), ev.get("end")
@@ -63,6 +63,14 @@ def weekly_intervals(blocks, day_start: datetime, tz):
         d = day_start.date()
         out.append((datetime.combine(d, _hm(b["start"]), tz), datetime.combine(d, _hm(b["end"]), tz)))
     return out
+
+
+def planning_start(now: str, deadline: str, lead_days: int = 3) -> str:
+    """Start looking `lead_days` before the deadline (never before now), so work spreads
+    across the week instead of piling onto the next free morning."""
+    tz = ZoneInfo("America/Los_Angeles")
+    start = max(_parse(now, tz), _parse(deadline, tz) - timedelta(days=lead_days))
+    return start.isoformat()
 
 
 def find_slot(now, deadline, duration_min, events, config, window=None):

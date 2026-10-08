@@ -120,6 +120,18 @@ class Slots(unittest.TestCase):
         second = slots.find_slot("2026-10-08T08:00:00-07:00", "2026-10-09T00:00:00-07:00", 30, [first], CFG)
         self.assertEqual(second["start"], "2026-10-08T08:30:00-07:00")
 
+    def test_focus_time_blocks_even_if_free(self):
+        ev = [{"start": "2026-10-08T08:00:00-07:00", "end": "2026-10-08T12:00:00-07:00",
+               "transparency": "transparent", "eventType": "FOCUS_TIME"}]
+        s = slots.find_slot("2026-10-08T08:00:00-07:00", "2026-10-09T00:00:00-07:00", 30, ev, CFG)
+        self.assertEqual(s["start"], "2026-10-08T12:00:00-07:00")
+
+    def test_planning_start_uses_lead_window(self):
+        self.assertEqual(slots.planning_start("2026-10-08T09:00:00-07:00", "2026-10-23T21:00:00-07:00"),
+                         "2026-10-20T21:00:00-07:00")
+        self.assertEqual(slots.planning_start("2026-10-08T09:00:00-07:00", "2026-10-09T21:00:00-07:00"),
+                         "2026-10-08T09:00:00-07:00")
+
     def test_no_slot_before_deadline(self):
         self.assertIsNone(slots.find_slot("2026-10-08T20:45:00-07:00", "2026-10-08T23:00:00-07:00", 60, [], CFG))
 

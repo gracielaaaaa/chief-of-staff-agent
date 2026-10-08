@@ -24,7 +24,7 @@ Before booking anything:
 - **Window.** Calls and errands to businesses (restaurants, stores, offices, returns) use `"window": {"start": "11:00", "end": "17:00"}` for calls and `{"start": "10:00", "end": "19:00"}` for errands. Focus work uses working hours.
 - **One run, one calendar.** After booking a slot, append it to the events list passed to the next `slots` call so items in the same run never overlap.
 
-- **TASK**: get primary-calendar events from now to the due date (or 7 days if no due), run `python3 -m jobs.lib.slots` with `duration_min` (default 30). Create the event `[Lane] <Client>: <text>` (client prefix for Consulting), `colorId` unset, popup 10 min. No slot: put it in `Needs you` with the conflict.
+- **TASK**: get primary-calendar events from now to the due date (or 7 days if no due), and search from `jobs.lib.slots.planning_start(now, due)` (3 days before the deadline, never earlier than now) so work spreads across the week. Run `python3 -m jobs.lib.slots` with `duration_min` (default 30). Her own focus-time blocks count as busy. Create the event `[Lane] <Client>: <text>` (client prefix for Consulting), `colorId` unset, popup 10 min. No slot: put it in `Needs you` with the conflict.
 - **REMINDER**: 10 min event at the stated time (or 9:00 next business day), transparent (free), popup at 0 min.
 - **EMAIL**: hand to the `drafter` skill with the item, lane, and source message id.
 - **I_OWE**: add a Ledger row (`type=I_OWE`, due = stated or +3 business days, `source` = Gmail link to the note), then book a TASK before the due date. If the deliverable is an email, also hand it to `drafter`.

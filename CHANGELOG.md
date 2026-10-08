@@ -49,3 +49,5 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 - Promise detection: v0 59% precision with a student-name leak; v2 7/7 recall, 100% precision, no leaks (see `evals/results/promises.score.md`).
 - Code prefilter drops automated sent mail (18 of 67 messages) before any model call; code backstop redacts student names; first-run backlog limited to 7 days with past-due items turned into one confirmation question.
 - Found that Granola participant lists can be incomplete (a client retreat listed only the owner), so the meeting filter also reads the notes.
+- Ledger live: 8 rows from the first run (6 open, 2 auto-closed because the matching sent mail already existed), 4 work blocks, 1 reminder, 1 flagged student draft.
+- Scheduling fixes found while booking: earliest-fit packed four tasks into one morning (now searches a 3-day lead window before each deadline), and Google marks focus time as "free" (her focus blocks now count as busy). 39 unit tests.
