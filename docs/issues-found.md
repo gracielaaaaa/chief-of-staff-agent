@@ -26,3 +26,5 @@ Every capability ran in dry-run mode on the owner's real data before it could wr
 | 20 | Cursors did not advance on quiet runs; one timestamp was off by an hour | Advance on success; timestamps from the clock | 0.5.1 |
 | 21 | The ledger step's meeting connector was never attached to the cloud routine | Attached | 0.5.1 |
 | 22 | A client promise from 12 days earlier ("I'll get back to you early next week") was missed because the first ledger run only looked back 7 days. The owner caught it herself. | First run should scan 30 days of sent mail for promises that are past due and still unanswered, and ask about them once | open |
+| 23 | Deleting an agent-created calendar event leaves its ledger item open, so digests keep nagging | Treat a deleted agent event as "done or dropped" and ask once | open |
+| 24 | Working every project in one chat overloaded it (owner feedback) | One session per workstream, coordinated through the ledger, drafts, and review doc; candidate feature: the agent offers a ready-to-start session for each new project | adopted |
