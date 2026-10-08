@@ -24,7 +24,9 @@ class Guardrail(unittest.TestCase):
     def test_never_sends_or_deletes(self):
         for t in ["send_message", "forward", "reply", "trash_thread", "delete_draft",
                   "delete_event", "respond_to_event", "share_file", "trash_file",
-                  "send_conversation", "post_discussion_entry", "bulk_grade_submissions", "delete"]:
+                  "send_conversation", "post_discussion_entry", "bulk_grade_submissions", "delete",
+                  "batch_clear_values", "execute_sql", "buy_domain", "create_broadcast",
+                  "create_assignment", "update_assignment", "copy_file"]:
             self.assertFalse(self.check(GMAIL + t), t)
 
     def test_drafts_and_reads_allowed(self):
@@ -35,6 +37,7 @@ class Guardrail(unittest.TestCase):
     def test_dry_run_blocks_writes_not_reads(self):
         self.assertFalse(self.check(GMAIL + "create_draft", {"DRY_RUN": "1"}))
         self.assertFalse(self.check(GMAIL + "label_thread", cfg={"dry_run": True}))
+        self.assertFalse(self.check(GMAIL + "append_values", {"DRY_RUN": "1"}))
         self.assertTrue(self.check(GMAIL + "search_threads", {"DRY_RUN": "1"}))
 
     def test_paused_blocks_writes(self):
@@ -46,6 +49,9 @@ class Guardrail(unittest.TestCase):
         self.assertFalse(guardrail.decide(GMAIL + "update_spreadsheet", {}, {}, req)[0])
         ok = {"requests": [{"appendCells": {"sheetId": 0}}]}
         self.assertTrue(guardrail.decide(GMAIL + "update_spreadsheet", {}, {}, ok)[0])
+
+    def test_harness_tools_pass(self):
+        self.assertTrue(self.check("mcp__ccd_session__mark_chapter"))
 
     def test_non_mcp_tools_pass(self):
         self.assertTrue(self.check("Bash"))
