@@ -65,11 +65,17 @@ def weekly_intervals(blocks, day_start: datetime, tz):
     return out
 
 
-def find_slot(now, deadline, duration_min, events, config):
+def find_slot(now, deadline, duration_min, events, config, window=None):
+    """window: optional {"start": "HH:MM", "end": "HH:MM"} narrower than working
+    hours, e.g. business hours for calls and errands. Callers booking several
+    items in one run must append each booked slot to `events` before the next call."""
     tz = ZoneInfo(config.get("timezone", "America/Los_Angeles"))
     now, deadline = _parse(now, tz), _parse(deadline, tz)
     dur = timedelta(minutes=int(duration_min))
-    hours = config.get("working_hours", {"start": "08:00", "end": "21:00"})
+    hours = dict(config.get("working_hours", {"start": "08:00", "end": "21:00"}))
+    if window:
+        hours["start"] = max(hours["start"], window["start"])
+        hours["end"] = min(hours["end"], window["end"])
     prot = config.get("protected", {})
     busy = busy_intervals(events, {str(c) for c in prot.get("color_ids", [])}, tz)
 
@@ -95,4 +101,4 @@ def find_slot(now, deadline, duration_min, events, config):
 if __name__ == "__main__":
     args = json.loads(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read())
     cfg = json.loads((ROOT / "config.json").read_text())
-    print(json.dumps(find_slot(args["now"], args["deadline"], args["duration_min"], args.get("events", []), cfg)))
+    print(json.dumps(find_slot(args["now"], args["deadline"], args["duration_min"], args.get("events", []), cfg, args.get("window"))))

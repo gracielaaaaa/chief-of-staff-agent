@@ -12,3 +12,10 @@
 - Guardrail switched from a block list to an allow list: only reads and 17 named write tools pass. New connectors (or new tools on existing ones) are blocked by default. Found because attaching the Sheets connector added `batch_clear_values`, which the block list missed. 18 unit tests.
 - Setup ran for real: Drive folder, Ledger, Run Log, _State (4 tabs), Style Guide, Lane Context, Look Into Later, Gmail labels.
 - Capture label renamed to `Agent/Inbox` (Gmail reserves "Inbox"). Skills resolve label ids before searching.
+
+## v0.1.2 (2026-10-08): first real-note dry run
+Ran the dispatcher dry-run on a real phone note (3 items: an errand, a fitness class, a restaurant follow-up). Classification was correct on all 3. Found and fixed 4 issues the synthetic evals missed:
+- **Sender allowlist.** The note came from the phone's personal mail, so "self only" would have skipped it. Notes are now accepted from a private list of the owner's addresses.
+- **Duplicate events.** The class was already on the calendar under a different title. Dispatcher now checks nearby events before booking.
+- **Same-run collisions.** Two tasks were booked into the same 8:00am slot. Slots booked in a run now feed the next search (new test).
+- **Business hours.** Calls and errands were scheduled before businesses open. Slot finder takes a time window (new test). 20 unit tests.

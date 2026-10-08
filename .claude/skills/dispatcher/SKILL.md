@@ -18,6 +18,12 @@ Gmail search: `label:<Agent/Inbox id> -label:<Agent/Done id> -label:<Agent/Skipp
 Send the note body and any images to the `classifier` subagent (mode: capture) with the short lane summary from `Lane Context` and today's date. One call per note.
 
 ## 4. Act on each item (dedupe key: `kind|<gmail message id>|<item text>`)
+Before booking anything:
+- **Already on the calendar?** Look at primary-calendar events within 2 hours of the item's time (or on its due date). If one plausibly matches (same activity, person, or place, even if worded differently, for example "arrive at Hele's" for "pilates with Helena"), do not create a new event. List it under `Booked` as `already on calendar: <event title>`.
+- **Link related events.** If the item refers to an event ("for the dinner on Tuesday"), find it and put its title, time, and location in the new event's description.
+- **Window.** Calls and errands to businesses (restaurants, stores, offices, returns) use `"window": {"start": "11:00", "end": "17:00"}` for calls and `{"start": "10:00", "end": "19:00"}` for errands. Focus work uses working hours.
+- **One run, one calendar.** After booking a slot, append it to the events list passed to the next `slots` call so items in the same run never overlap.
+
 - **TASK**: get primary-calendar events from now to the due date (or 7 days if no due), run `python3 -m jobs.lib.slots` with `duration_min` (default 30). Create the event `[Lane] <Client>: <text>` (client prefix for Consulting), `colorId` unset, popup 10 min. No slot: put it in `Needs you` with the conflict.
 - **REMINDER**: 10 min event at the stated time (or 9:00 next business day), transparent (free), popup at 0 min.
 - **EMAIL**: hand to the `drafter` skill with the item, lane, and source message id.

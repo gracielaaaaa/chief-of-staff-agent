@@ -101,6 +101,16 @@ class Slots(unittest.TestCase):
         s = slots.find_slot("2026-10-13T14:30:00-07:00", "2026-10-14T00:00:00-07:00", 30, [], CFG)
         self.assertEqual(s["start"], "2026-10-13T15:30:00-07:00")
 
+    def test_business_hours_window(self):
+        s = slots.find_slot("2026-10-07T22:25:00-07:00", "2026-10-09T17:00:00-07:00", 15, [], CFG,
+                            {"start": "11:00", "end": "17:00"})
+        self.assertEqual(s["start"], "2026-10-08T11:00:00-07:00")
+
+    def test_booked_slots_feed_next_search(self):
+        first = slots.find_slot("2026-10-08T08:00:00-07:00", "2026-10-09T00:00:00-07:00", 30, [], CFG)
+        second = slots.find_slot("2026-10-08T08:00:00-07:00", "2026-10-09T00:00:00-07:00", 30, [first], CFG)
+        self.assertEqual(second["start"], "2026-10-08T08:30:00-07:00")
+
     def test_no_slot_before_deadline(self):
         self.assertIsNone(slots.find_slot("2026-10-08T20:45:00-07:00", "2026-10-08T23:00:00-07:00", 60, [], CFG))
 
