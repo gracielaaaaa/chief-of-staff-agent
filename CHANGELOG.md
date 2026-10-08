@@ -37,3 +37,5 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 - **Product decision:** graded coursework gets outlines and work blocks, never full drafts (academic integrity; course AI policies vary). Diverges from the original spec on purpose.
 - **Product decision:** one 9am digest popup per day instead of one popup per deadline (the spec rule would have meant 4 popups on one Saturday).
 - First sync: 11 items across 4 courses, 10 not submitted.
+- Per-course AI policy (kept in the private Lane Context doc): AI courses get full drafts, all other graded work gets outlines. Large technical projects are routed to a dedicated build session instead of the scheduled agent.
+- Course step turned on for cloud runs after the first live run: 5 digest popups, 1 outline, 2 work blocks.

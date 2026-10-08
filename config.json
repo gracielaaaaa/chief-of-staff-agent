@@ -112,8 +112,8 @@
   "steps": {
     "capture_notes": true,
     "inbox_triage": true,
-    "course_deadlines": false,
+    "course_deadlines": true,
     "ledger": false
   },
-  "steps_note": "course_deadlines turns on after the first Canvas sync; ledger after its dry run passes"
+  "steps_note": "ledger turns on after its dry run passes"
 }
