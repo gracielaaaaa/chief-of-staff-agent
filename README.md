@@ -2,7 +2,7 @@
 
 An AI agent that turns blank-page work into drafts you only have to review, and makes sure every commitment you make gets done. Built with Claude Code skills, subagents, and MCP connectors (Gmail, Google Calendar, Drive, Sheets, Docs, Granola, Canvas), running on a schedule in the cloud.
 
-Built by Graciela de Leon (UC Berkeley MBA/MPH) for herself as user zero.
+Built by Graciela de Leon (UC Berkeley MBA/MPH) for herself as user zero. **Read the [case study](docs/case-study.md)** (draft, week 1).
 
 ## The problem
 The bottleneck isn't time, it's starting. Emails, meeting recaps, and deliverables sit undone because they begin as a blank page, and follow-ups promised in meetings and group chats slip through the cracks.
@@ -24,11 +24,14 @@ The bottleneck isn't time, it's starting. Emails, meeting recaps, and deliverabl
 6. **Privacy by design.** Public code, private data ([ADR 0006](docs/decisions/0006-public-repo-privacy.md)).
 
 ## Evals
-| Eval | Set | Result |
+| Eval | Data | Result |
 |---|---|---|
-| Capture classification v0 (Haiku) | 20 synthetic notes incl. 1 prompt-injection | 20/20 notes, item recall 1.00 |
+| Capture classification (Haiku) | 20 synthetic notes incl. 1 prompt injection | 20/20 (ceiling check) |
+| Needs-reply triage (Haiku) | 7 real inbox threads | 2 correct, 1 false positive |
+| Promise detection (Haiku) | 67 real sent emails, 7 labeled commitments | v0 59% precision with a privacy leak; v2 7/7 recall, 100% precision |
+| Edit learner (Sonnet) | 8 synthetic pairs, 5 planted habits, 2 traps | v0 5/5 with 1 false rule; v1 4/5 with 0 (shipped) |
 
-v0 is a ceiling check on a self-authored set. Next: a harder held-out set from real (private) notes, a draft-quality rubric, and promise-detection precision/recall on 2 weeks of sent mail. See [`evals/`](evals/) and the [changelog](CHANGELOG.md).
+Real-data dry runs found [21 issues](docs/issues-found.md) the evals missed. Details: [`evals/results/`](evals/results/), [changelog](CHANGELOG.md).
 
 ## Success metrics (targets after 4 weeks)
 - 60%+ of drafts sent with light edits (edit ratio under 20%)
