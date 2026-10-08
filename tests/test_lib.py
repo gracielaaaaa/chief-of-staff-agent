@@ -2,7 +2,7 @@ import importlib.util
 import unittest
 from pathlib import Path
 
-from jobs.lib import canvas, dedupe, diff, learn, slots
+from jobs.lib import canvas, dedupe, diff, learn, promises, slots
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("guardrail", ROOT / ".claude/hooks/guardrail.py")
@@ -179,6 +179,35 @@ class Learn(unittest.TestCase):
                {"id": "r3", "status": "candidate", "evidence_count": 1, "confirmed": "yes"},
                {"id": "r4", "status": "active", "evidence_count": 5}]
         self.assertEqual(learn.activations(obs), ["r1", "r3"])
+
+
+class Promises(unittest.TestCase):
+    def test_automated_mail_dropped(self):
+        for snip in ["Booked by Pat Example pat@example.edu Appointment Schedule",
+                     "CGSM Monthly GBM Maya Ortiz has accepted this invitation. Hi everyone",
+                     "\U0001F44D Maya Ortiz reacted via Gmail On Tue, Oct 6",
+                     "Chat Maya is inviting you to a scheduled Zoom meeting. Join",
+                     "This event has been updated Changed: conferencing"]:
+            self.assertTrue(promises.is_automated(snip), snip)
+
+    def test_real_mail_kept(self):
+        self.assertFalse(promises.is_automated("Hi Sam, That works for me. I'll send you the grades asap."))
+
+    def test_student_names_redacted_by_code(self):
+        it = promises.redact_who({"who": "Pat Example", "who_type": "other",
+                                  "what": "Share the exam with DSP 4 days before the exam"})
+        self.assertEqual((it["who"], it["who_type"]), ("student", "student"))
+        kept = promises.redact_who({"who": "Prof Alder", "who_type": "instructor", "what": "grade the quiz"})
+        self.assertEqual(kept["who"], "Prof Alder")
+
+    def test_past_due_needs_confirmation(self):
+        self.assertEqual(promises.triage({"due": "2026-10-06"}, "2026-10-08"), "confirm")
+        self.assertEqual(promises.triage({"due": "2026-10-24"}, "2026-10-08"), "open")
+        self.assertEqual(promises.triage({"due": None}, "2026-10-08"), "open")
+
+    def test_exclusions(self):
+        self.assertTrue(promises.excluded(["recruiter@employer.example.com"], "Hi", ["employer.example.com"], []))
+        self.assertFalse(promises.excluded(["pat@example.edu"], "Hi Pat", ["employer.example.com"], ["EmployerCo"]))
 
 
 class Dedupe(unittest.TestCase):

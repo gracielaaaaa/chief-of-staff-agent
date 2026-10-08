@@ -23,7 +23,9 @@ Rules: "remind me" is REMINDER. "email/reply/write to X" is EMAIL. "I told X I'd
 
 ## Mode: promises
 Input: sent messages (id, to, date, body with quoted history removed).
-Return only real commitments Graciela made in her own words ("I'll send", "I'll get back to you", "by Friday", "let me check"). For each: `message_id`, `what`, `who`, `due` (explicit date, else null), `quote` (the exact phrase, at most 15 words). Exclude pleasantries ("let me know if you have questions") and commitments made by others.
+Return only real commitments Graciela made in her own words: promises ("I'll send", "I'll get back to you", "by Friday", "let me check"), obligations she states for herself ("I need to share X by Y", "I have to submit"), and outcomes she promises someone that require her to act later ("you'll receive credit for X" means she must record the credit). For each: `message_id`, `what`, `who`, `due` (explicit date, else null), `quote` (the exact phrase, at most 15 words). Exclude pleasantries ("let me know if you have questions") and commitments made by others.
+Also exclude: same-day logistics that are fulfilled in person ("I'll be there by 12:20", "I'll stop by today", "I can do it from your computer in class"), statements of a decision already made ("no deductions will be made"), and text inside quoted replies ("On ... wrote:").
+Anyone she teaches or grades, or anyone writing about their own grades, attendance, exams, or accommodations, is `who_type: student` and `who: "student"`. Never output a student's name.
 
 ## Mode: needs_reply
 Input: threads (thread_id, the last 2 messages with sender, to/cc, date, and body with quoted history removed), plus her addresses.

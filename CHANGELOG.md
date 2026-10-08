@@ -44,3 +44,8 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 - Edit ratio ignores the agent's own `REVIEW BEFORE SENDING` line (deleting it was being counted as an edit).
 - Tested helpers for weekly metrics, 7-day rejection, and rule activation (2+ sightings or owner confirmation). 31 unit tests.
 - Edit-learner eval on 8 synthetic pairs: v0 found 5/5 planted habits but invented 1 false rule and 12 rules total; v1 (prompt excludes placeholder fills and fact fixes, one idea per rule) found 4/5 with 0 false rules. Shipped v1: precision over recall for rules that change every future draft.
+
+## v0.5.0 (2026-10-08): ledger dry run on real meetings and sent mail
+- Promise detection: v0 59% precision with a student-name leak; v2 7/7 recall, 100% precision, no leaks (see `evals/results/promises.score.md`).
+- Code prefilter drops automated sent mail (18 of 67 messages) before any model call; code backstop redacts student names; first-run backlog limited to 7 days with past-due items turned into one confirmation question.
+- Found that Granola participant lists can be incomplete (a client retreat listed only the owner), so the meeting filter also reads the notes.
