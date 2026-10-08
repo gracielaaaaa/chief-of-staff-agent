@@ -14,10 +14,10 @@ Follow `run-common` Start step 1 only (no kill switch, no Run Log until it exist
    Freeze row 1 on every tab. Write headers as plain strings (`RAW`), never parsed.
 3. **Docs** (mime `application/vnd.google-apps.document`): `Look Into Later` (headings School, Consulting, Other), `Style Guide` (headings Active rules, Candidates, Retired), `Lane Context`.
 4. **Lane Context content.** If `Lane Context` is empty, fill it from the private source Graciela provides in chat (or `SPEC.md` section 7 when running locally). This doc holds the real people, courses, and clients. It never goes into the repo.
-5. **Gmail labels.** Create `Inbox/Agent`, `Agent/Done`, `Agent/Skipped` if missing.
+5. **Gmail labels.** ("Inbox" is a reserved Gmail name, so everything lives under `Agent/`.) Create `Agent/Inbox`, `Agent/Done`, `Agent/Skipped` if missing.
 6. **Protected colors.** List the primary calendar's events for the last 30 days. Report which `colorId`s appear with sample titles, and ask Graciela which are blue, purple, and yellow. She sets `config.protected.color_ids`. (Calendar color ids 7 Peacock, 9 Blueberry, 3 Grape, 5 Banana are the usual matches, but confirm with her.)
 7. **Print the Gmail filter steps** for Graciela (she creates the filter herself; the agent never creates standing rules):
-   Gmail > Settings > Filters > Create new filter > To: `<her address with +inbox>` > Create filter > Apply the label `Inbox/Agent`, and Never send it to Spam.
+   Gmail > Settings > Filters > Create new filter > To: `<her address with +inbox>` > Create filter > Apply the label `Agent/Inbox`, and Never send it to Spam.
 8. Record `meta` keys `setup_version=1`, `setup_ts=<now>`.
 
 Report what was created vs. already present, with links.

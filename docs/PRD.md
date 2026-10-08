@@ -72,7 +72,7 @@ Edit ratio = character-level diff between the agent's draft and what she actuall
 
 | Input | How | Phase |
 |---|---|---|
-| Brain dumps from phone | Email to herself at a plus-address (for example `you+inbox@example.com`) or with label `Inbox/Agent`; also works from Claude mobile app using the claude.ai skills | 1 |
+| Brain dumps from phone | Email to herself at a plus-address (for example `you+inbox@example.com`) or with label `Agent/Inbox`; also works from Claude mobile app using the claude.ai skills | 1 |
 | Brain dumps from laptop | Same email path, or directly in Claude Code / claude.ai | 1 |
 | Client and group meetings | Granola notes and transcripts | 1 |
 | Her sent mail | Scanned for promises | 1 |

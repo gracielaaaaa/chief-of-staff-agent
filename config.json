@@ -32,7 +32,7 @@
   },
   "capture": {
     "address_suffix": "+inbox",
-    "label": "Inbox/Agent",
+    "label": "Agent/Inbox",
     "done_label": "Agent/Done",
     "pause_subject": "PAUSE AGENT",
     "accept_from": "self"
