@@ -24,6 +24,13 @@ Set `REVIEW BEFORE SENDING` (first line of the body, plus the review doc) when t
 - **Email**: Gmail `create_draft` with `replyToMessageId` when replying (keeps it in-thread), else a new draft. Never `send_message`, `reply`, or `forward` (blocked anyway).
 - **Deliverable**: a Google Doc in the client folder or `Courses/<course>/Drafts/`. If the work is more than about 60 minutes, outline it as 30 to 60 min chunks, fully draft chunk 1 in the doc, and book one TASK per chunk before the due date (through the dispatcher TASK rules).
 - **Recap** (after a client meeting): email draft to the external attendees: thanks (one line), decisions, action items as bullets with owner and date, next meeting.
+  Recap accuracy rules (from the recap fact-check, 2026-10-08):
+  - Use only this meeting's notes. Never pull dates, times, or plans from other meetings; if another meeting conflicts, write `[CHECK: X or Y]`.
+  - An open question ("still TBD") is listed under `Open questions`, never as an action item with an owner.
+  - Findings and recommendations are not decisions. Only list what the group agreed as a decision.
+  - If the notes don't name an owner, write `[CHECK: owner]`; never assign one.
+  - Never invent a time; a date without a time stays date-only.
+  - Address every external attendee who was in the meeting.
 
 ## 5. Log for learning
 Append to `_State` tab `drafts`: `draft_id, message_id, thread_id, to, recipient_type (client|student|instructor|teammate|other), subject, body, created, lane, flags, status=open`. For students, `to` is stored but no name goes into `subject` logs in the Run Log or review doc.

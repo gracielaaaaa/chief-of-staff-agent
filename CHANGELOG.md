@@ -60,3 +60,7 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 ## v0.5.2 (2026-10-08): review doc renderer
 - The daily review doc is rendered by tested code (`jobs/lib/review.py`): fixed section order, flagged drafts first, HTML escaped, em dashes rejected. 40 unit tests.
 - Needs-reply eval: 10/10 on the synthetic set (a regression check after the real-mail false-positive fix, not an unbiased estimate).
+
+## v0.5.3 (2026-10-08): recap fact-check
+- Recap acceptance test (5 past client meetings, offline): the drafter reported 30/30 action items covered. An independent fact-checker, confirmed by hand, found 1 open question listed as a task, 1 finding listed as a decision, 1 owner assigned without support, 1 date pulled from another meeting, 1 inferred time, and 1 attendee left off the To line. Self-reported coverage overstated quality.
+- Drafter now has explicit recap accuracy rules for each of those error types. Owner grading pending.
