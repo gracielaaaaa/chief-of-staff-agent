@@ -35,7 +35,7 @@
     "label": "Agent/Inbox",
     "done_label": "Agent/Done",
     "pause_subject": "PAUSE AGENT",
-    "accept_from": "self"
+    "accept_from": "lane_context:My addresses"
   },
   "drive": {
     "root_folder_name": "Chief of Staff",

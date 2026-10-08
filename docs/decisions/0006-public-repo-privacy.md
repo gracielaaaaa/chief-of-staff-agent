@@ -11,7 +11,7 @@ The repo doubles as a portfolio piece, but the system handles student email (FER
 - A pre-commit hook (`scripts/scrub_check.py`) blocks emails, Drive and calendar ids, and a private term list kept outside git.
 - Published results are aggregates only.
 - Student names and grades are never written to the Ledger, Run Log, or review docs, only to the Gmail draft itself.
-- Capture notes are accepted only from her own authenticated address, so a public capture address cannot be used to give the agent instructions.
+- Capture notes are accepted only from her own addresses (kept in the private Lane Context doc, not the repo), so a public capture address cannot be used to give the agent instructions. First real test note came from her phone's personal mail, which is why this is a list and not just the account address.
 
 ## Consequences
 Two sources of truth for lane context (synthetic in git, real in Drive). The agent prompts are written against the structure, not the names.
