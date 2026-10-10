@@ -2,7 +2,7 @@ import importlib.util
 import unittest
 from pathlib import Path
 
-from jobs.lib import canvas, dedupe, diff, learn, promises, review, sensitive, slots
+from jobs.lib import canvas, confidential, dedupe, diff, facts, learn, pricing, promises, review, sensitive, slots
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("guardrail", ROOT / ".claude/hooks/guardrail.py")
@@ -146,6 +146,15 @@ class Slots(unittest.TestCase):
     def test_no_slot_before_deadline(self):
         self.assertIsNone(slots.find_slot("2026-10-08T20:45:00-07:00", "2026-10-08T23:00:00-07:00", 60, [], CFG))
 
+    def test_call_options_on_distinct_days(self):
+        ev = [{"start": "2026-10-13T11:00:00-07:00", "end": "2026-10-13T12:00:00-07:00", "colorId": "9"}]
+        s = slots.find_slots("2026-10-12T16:30:00-07:00", "2026-10-20T00:00:00-07:00", 30, ev, CFG, 3,
+                             {"start": "10:00", "end": "17:00"})
+        self.assertEqual([x["start"] for x in s], ["2026-10-12T16:30:00-07:00", "2026-10-13T10:00:00-07:00",
+                                                    "2026-10-14T10:00:00-07:00"])
+        self.assertEqual(len(slots.find_slots("2026-10-12T16:30:00-07:00", "2026-10-13T12:00:00-07:00", 30, [], CFG, 3,
+                                              {"start": "10:00", "end": "17:00"})), 2)
+
 
 class Canvas(unittest.TestCase):
     def test_utc_due_is_previous_evening_pacific(self):
@@ -288,6 +297,64 @@ class Sensitive(unittest.TestCase):
         self.assertTrue(sensitive.sensitive_subject("Your 401(k) quarterly statement"))
         self.assertFalse(sensitive.sensitive_subject("Invoice #42 from Mendocino Farms"))
         self.assertFalse(sensitive.sensitive_subject("Your Amazon order receipt"))
+
+
+class Facts(unittest.TestCase):
+    F = [{"key": "pilot price", "value": "$1,500 per cohort", "source": "call notes"},
+         {"key": "Pilot price", "value": "$4,500 per cohort", "source": "questionnaire Q7"},
+         {"key": "cohort size", "value": "25 participants", "source": "questionnaire Q3"}]
+
+    def test_extract_skips_bare_numbers(self):
+        got = facts.extract("Option 2, Phase 1: $4.5k per cohort, 25 participants, 6 weeks, 10%.")
+        self.assertEqual([(g["kind"], g["value"], g["per"]) for g in got],
+                         [("money", 4500.0, "cohort"), ("percent", 10.0, ""),
+                          ("count", 25.0, "participant"), ("count", 6.0, "week")])
+
+    def test_conflict_shows_both_sources(self):
+        c = facts.conflicts(self.F)
+        self.assertEqual(len(c), 1)
+        self.assertEqual(c[0]["ratio"], 3.0)
+        self.assertEqual({v["source"] for v in c[0]["values"]}, {"call notes", "questionnaire Q7"})
+
+    def test_untraced_numbers(self):
+        draft = "Each cohort of 25 participants runs at $4,500 per cohort, with 40 hours of support."
+        self.assertEqual(facts.untraced(draft, self.F), ["40 hours"])
+
+    def test_gate_blocks_until_clean(self):
+        resolved = self.F[1:]
+        bad = facts.gate("Pilot at $4,500 per cohort [CHECK: dates], like Acme Academy.", resolved,
+                         [{"client": "Acme", "term": "Acme Academy"}])
+        self.assertFalse(bad["ready"])
+        self.assertEqual((bad["check_markers"], len(bad["cross_client"])), (1, 1))
+        self.assertTrue(facts.gate("Pilot at $4,500 per cohort for 25 participants.", resolved)["ready"])
+        self.assertFalse(facts.gate("Pilot at $4,500 per cohort.", self.F)["ready"])  # conflict unresolved
+
+
+class Confidential(unittest.TestCase):
+    def test_scan_whole_phrase_case_insensitive(self):
+        terms = [{"client": "Acme", "term": "Care Navigator"}, {"client": "Acme", "term": "AC"}]
+        hits = confidential.scan("Similar to the care navigator track, but local.", terms)
+        self.assertEqual([h["term"] for h in hits], ["Care Navigator"])
+        self.assertEqual(confidential.scan("Care Navigators", terms[:1]), [])
+
+    def test_sources_outside_client_folder(self):
+        out = confidential.sources_outside(
+            ["Consulting/Harbor/questionnaire", "Consulting/Acme/landscape v2"], ["Consulting/Harbor"])
+        self.assertEqual(out, ["Consulting/Acme/landscape v2"])
+
+
+class Pricing(unittest.TestCase):
+    def test_no_rate_is_a_question(self):
+        self.assertIn("question", pricing.frame({"options": [{"name": "Pilot", "hours_low": 20, "hours_high": 30}]}))
+
+    def test_frame_ranges_budget_and_levers(self):
+        f = pricing.frame({"rate": 100, "options": [{"name": "Pilot", "hours_low": 20, "hours_high": 30},
+                                                    {"name": "Full", "hours_low": 90, "hours_high": 120}],
+                           "budget": {"low": 2000, "high": 5000}, "levers": [{"name": "one fewer workshop", "hours_delta": -6}]})
+        self.assertEqual(f["options"][0]["cost_basis"], [2000, 3000])
+        self.assertEqual([o["vs_budget"] for o in f["options"]], ["under", "over"])
+        self.assertEqual(f["levers"][0]["fee_delta"], -600)
+        self.assertNotIn("fee", f)
 
 
 class Dedupe(unittest.TestCase):
