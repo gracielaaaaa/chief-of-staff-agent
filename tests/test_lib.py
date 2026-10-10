@@ -19,6 +19,14 @@ CFG = {
 
 
 class Guardrail(unittest.TestCase):
+    def setUp(self):  # never read the real allowed-folders file on the laptop
+        from jobs.lib import folders
+        self._real, folders.ALLOWED_FILE = folders.ALLOWED_FILE, ROOT / "tests" / "_no_such_file.json"
+
+    def tearDown(self):
+        from jobs.lib import folders
+        folders.ALLOWED_FILE = self._real
+
     def check(self, tool, env=None, cfg=None):
         return guardrail.decide(tool, env or {}, cfg or {})[0]
 
@@ -60,6 +68,30 @@ class Guardrail(unittest.TestCase):
     def test_attachments_and_downloads_blocked(self):
         for t in ["get_message_attachment", "download_file_content", "download_course_file"]:
             self.assertFalse(self.check(GMAIL + t), t)
+
+    def test_drive_files_only_in_own_folder(self):
+        env = {"COS_ALLOWED_FOLDERS": "cos-root,cos-review"}
+        drive = GMAIL + "create_file"
+        self.assertTrue(guardrail.decide(drive, env, {}, {"title": "Review", "parentId": "cos-review"})[0])
+        self.assertFalse(guardrail.decide(drive, env, {}, {"title": "x", "parentId": "client-folder"})[0])
+        self.assertFalse(guardrail.decide(drive, env, {}, {"title": "x"})[0])
+        self.assertFalse(guardrail.decide(drive, {}, {}, {"title": "x", "parentId": "cos-root"})[0])
+        self.assertFalse(guardrail.decide(GMAIL + "update_file", env, {}, {"fileId": "f", "addParents": "elsewhere"})[0])
+        self.assertTrue(guardrail.decide(GMAIL + "update_file", env, {}, {"fileId": "f", "title": "renamed"})[0])
+
+    def test_setup_may_create_root_folder(self):
+        root = {"title": "Chief of Staff", "contentMimeType": "application/vnd.google-apps.folder"}
+        self.assertTrue(guardrail.decide(GMAIL + "create_file", {}, {}, root)[0])
+        self.assertFalse(guardrail.decide(GMAIL + "create_file", {}, {}, dict(root, title="Other"))[0])
+
+    def test_allowed_folders_file(self):
+        import tempfile
+        from jobs.lib import folders
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / "allowed.json"
+            self.assertEqual(folders.load({}, p), set())
+            folders.save(["a", "b", "a"], p)
+            self.assertEqual(folders.load({"COS_ALLOWED_FOLDERS": "c"}, p), {"a", "b", "c"})
 
     def test_harness_tools_pass(self):
         self.assertTrue(self.check("mcp__ccd_session__mark_chapter"))

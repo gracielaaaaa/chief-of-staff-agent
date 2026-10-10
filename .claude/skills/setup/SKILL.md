@@ -6,7 +6,7 @@ description: Idempotently creates the Chief of Staff Drive folder, sheets, docs,
 
 Follow `run-common` Start step 1 only (no kill switch, no Run Log until it exists).
 
-1. **Folder.** Search Drive for a folder titled `Chief of Staff` owned by me. Create it only if missing. Inside it create any missing folders from `config.drive.folders`.
+1. **Folder.** Search Drive for a folder titled `Chief of Staff` owned by me. Create it only if missing. Inside it create any missing folders from `config.drive.folders`. Then run `python3 -m jobs.lib.folders set <root id> <each folder id>` so the guardrail allows files in them (creating the root folder itself is the only Drive create allowed before this list exists).
 2. **Sheets** (create with Drive `create_file`, mime `application/vnd.google-apps.spreadsheet`, parent = root folder, then set tabs and headers with the Sheets connector):
    - `Ledger`, tab `items`: `id, type, lane, client_or_course, what, who, due, source, status, draft_link, created, closed`
    - `Run Log`, tab `runs`: `run_id, ts, job, step, source, action, object_id, dedupe_key, status, note`; tab `metrics`: `week, metric, value, note`

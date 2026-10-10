@@ -10,7 +10,7 @@ Input: `client` (as named in Lane Context), optional `prospect: true`.
 
 ## 0. Where things live
 - **Read from:** the client's existing Drive folder (questionnaire, notes), Granola meetings with the client's contacts, the latest Gmail thread with them, the private `Consulting Templates` doc. The private `Pricing` doc is read only in step 4 and its contents go only to the pricing helper and analyst.
-- **Write to:** `Chief of Staff/Consulting/<Client>/` only (create the folder if missing). Docs: `<Client> - Questions`, `<Client> - Proposal`. Plus one Gmail draft and the review doc.
+- **Write to:** `Chief of Staff/Consulting/<Client>/` only (create the folder if missing, then `python3 -m jobs.lib.folders add <new folder id>` so the guardrail allows files in it). Docs: `<Client> - Questions`, `<Client> - Proposal`. Plus one Gmail draft and the review doc.
 - **Firewall list:** from Lane Context Consulting, build `other_client_terms` = every other client's and lead's name, contacts, products, programs, and known figures, as `[{client, term}]`. Note who introduced this client, if anyone. Never write this list anywhere.
 
 ## 1. Which pass?

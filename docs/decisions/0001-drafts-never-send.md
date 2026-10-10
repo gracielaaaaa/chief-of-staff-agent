@@ -12,3 +12,4 @@ The agent can create and update drafts, calendar events, and files in one Drive 
 - Graciela always does the last step (press Send). The product metric becomes "edit ratio" and "time in review queue", not "emails sent".
 - Delivery of digests cannot use email to herself, see 0002.
 - Unit tests cover the block list (`tests/test_lib.py`).
+- 2026-10-09: the one-folder rule is enforced in code too. Drive `create_file` and moves are blocked unless the parent is the `Chief of Staff` folder or one of its subfolders (ids resolved by name each run into gitignored `state/allowed_folders.json`, never in the repo; missing list = blocked). Added before allowing Drive creates without a per-call prompt. Limit: a run that can write local files could add to the list, so the list is rewritten from Drive at every run start.
