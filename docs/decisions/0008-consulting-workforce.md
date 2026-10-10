@@ -32,3 +32,6 @@ A lead skill (`consulting-lead`) and five subagents, run on demand per client, i
 - The number extractor only sees money, percents, and counts with a unit. Claims in words rely on the Haiku fact-checker.
 - Out of scope for v1: SOWs, contracts, invoices, deliverables. They can reuse the same gates.
 - Eval: `evals/consulting/` (synthetic version of the 2026-10-09 case), scored by `python3 -m evals.score_consulting`.
+
+## Amendment, 2026-10-10: value and ROI analyst
+Added `value-analyst` (Sonnet) at the owner's request so every engagement is approached from the client's return. Pass 1 (`frame`): value drivers with baseline, target, measure, and source, plus payback per option in the client's own units; missing baselines become questions, and an option that moves no driver is reshaped. Pass 2 (`client_read`): reads the draft as the client (value visible, affordable, asks answered, not over-scoped) and is part of the gate. One agent instead of a separate client-advocate reviewer, to keep handoffs and cost down.

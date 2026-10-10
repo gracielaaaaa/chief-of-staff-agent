@@ -93,7 +93,8 @@
     "proposal": "sonnet",
     "pricing_frame": "sonnet",
     "fact_check": "haiku",
-    "confidentiality": "haiku"
+    "confidentiality": "haiku",
+    "value_frame": "sonnet"
   },
   "inbox_triage": {
     "enabled": true,
