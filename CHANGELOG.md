@@ -89,3 +89,6 @@ From a real proposal that took a dozen rounds of `[CHECK]` fixes. Prospect and c
 ## v0.4.1 (2026-10-09): Drive folder check in the guardrail
 - The guardrail now checks where Drive files go. `create_file` and moves must target the `Chief of Staff` folder or a folder inside it; anything else, a missing parent, or a missing folder list is blocked. Found while deciding whether to stop approving each Drive create by hand: the hook allowed `create_file` anywhere in Drive, and the one-folder rule lived only in CLAUDE.md.
 - Folder ids stay out of the repo: `run-common` Start resolves them by name and writes gitignored `state/allowed_folders.json` (`jobs/lib/folders.py`). Setup may still create the root folder itself. 59 unit tests.
+
+## v0.4.2 (2026-10-10): value and ROI analyst
+- New `value-analyst` subagent (Sonnet): frames every engagement by the client's return (baseline, target, measure, payback in their units) in pass 1, and reads the proposal as the client in pass 2 as part of the send-ready gate. Proposal architect now leads with value. ADR 0008 amended.

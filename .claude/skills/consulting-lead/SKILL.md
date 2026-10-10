@@ -23,6 +23,7 @@ Look for `<Client> - Questions` in the client's agent folder.
 2. **Gather** (trim hard, `defaults.transcript_char_cap`): questionnaire responses, call notes and Granola summaries, the last 3 messages of the thread, and the Ledger rows for this client (promises made, due dates). Label every source (`questionnaire Q7`, `call notes 2026-10-02`, `email 2026-10-05`).
 3. **Synthesize.** `discovery-synthesizer` subagent. Then run `python3 -m jobs.lib.facts conflicts '<facts>'`. Every conflict becomes a question showing each value with its source and the ratio ("questionnaire Q7 says $4,500 per cohort, call notes say $1,500, 3x apart: which is right?"), default = the client's written answer.
 4. **Pricing frame.** Read the `Pricing` doc. Draft the option outline (scope and levers only, no prose) yourself from the findings and template. `pricing-analyst` subagent estimates hours; run `python3 -m jobs.lib.pricing '<json>'` with her rate, the hours, anchors, budget, and levers; give the result back to the analyst for its question. If the Pricing doc has no rate, the first question is the rate. Never put a fee in a default.
+4b. **Value frame.** `value-analyst` subagent, mode `frame`, with findings, facts, anchors, the option outline, and the pricing result. Its drivers and success measures go into the Questions doc; its questions join the batch (missing baselines first). An option that moves no value driver is cut or reshaped before the batch is written.
 5. **Confidentiality.** `python3 -m jobs.lib.confidential` on the findings with `other_client_terms` and every source path (`allowed_folders` = this client's folders). Then `confidentiality-reviewer` subagent. Any product overlap with another client, or anything about the introducer, becomes a question ("Their offer overlaps with <other client>'s product line. Mention it, stay silent, or decline that scope?"), default = stay silent.
 6. **Relationship check.** From the Ledger and sent mail: did she promise this proposal by a date that has passed? Note it for the cover email (no question unless the tone is unclear).
 7. **Write `<Client> - Questions`** (one doc, numbered, most important first, at most 12 questions):
@@ -35,18 +36,20 @@ Look for `<Client> - Questions` in the client's agent folder.
    ...
    Fact table (key | value | source)
    Findings summary (5 to 8 bullets with sources)
-   Options outline (names, scope, hours ranges, no fees)
+   Value frame (drivers with baseline, target, measure, and source; payback per option in the client's units)
+   Options outline (names, scope, hours ranges, the drivers each moves, no fees)
    ```
    Dedupe key `key('consult_questions', <client>, <questionnaire file id>)`.
 8. **Review doc** `Needs you`: "<Client>: N questions before the proposal (link). About 10 minutes." Then `run-common` Finish.
 
 ## Pass 2: send-ready proposal
 9. **Read answers.** Blank = recommended default. Her answers are facts with source `Graciela`. Add them to the fact table; for each resolved conflict keep only the value she chose.
-10. **Draft.** `proposal-architect` subagent with findings, resolved facts, answers, template, lane tone, Style Guide. If it returns `blockers`, append them as new questions to the Questions doc, add a `Needs you` line, and stop.
+10. **Draft.** `proposal-architect` subagent with findings, resolved facts, answers, the value frame, template, lane tone, Style Guide. The summary leads with the value the client gets, and "How we will know it worked" uses the value analyst's measures. If it returns `blockers`, append them as new questions to the Questions doc, add a `Needs you` line, and stop.
 11. **Gate (code, then models).**
     - `python3 -m jobs.lib.facts gate '{"draft": ..., "facts": ..., "other_client_terms": ...}'` must return `ready: true`.
     - `fact-checker` subagent: `unsupported` and `misquoted` must be empty.
     - `confidentiality-reviewer` subagent: `hits` must be empty.
+    - `value-analyst` subagent, mode `client_read`: no `hesitations` left. Fix wording ones yourself; the rest become questions.
     On a failure, fix what is a pure wording issue yourself (re-run the gate after). Anything needing a fact or a decision goes back to the Questions doc as a new numbered question; stop. Never ship a doc with a `[CHECK`.
 12. **Write `<Client> - Proposal`** (Google Doc, from the architect's markdown). Dedupe key `key('consult_proposal', <client>, <questions doc id>)`; on re-run update the same doc.
 13. **Call times.** List primary calendar events for the next `consulting.call_search_business_days` business days, then `python3 -m jobs.lib.slots '{"now": <start of the next business day>, "deadline": ..., "duration_min": <consulting.call_minutes>, "events": [...], "count": <consulting.call_options>, "window": <consulting.call_window>}'` (weekends are skipped, protected colors and office hours are respected, nothing is booked). Offer them in the client's time zone if Lane Context has it, else Pacific with "PT".
