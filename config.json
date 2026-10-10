@@ -45,12 +45,15 @@
       "state": "_State",
       "look_into_later": "Look Into Later",
       "style_guide": "Style Guide",
-      "lane_context": "Lane Context"
+      "lane_context": "Lane Context",
+      "pricing": "Pricing",
+      "consulting_templates": "Consulting Templates"
     },
     "folders": [
       "Courses",
       "Briefs",
-      "Review"
+      "Review",
+      "Consulting"
     ]
   },
   "defaults": {
@@ -85,7 +88,12 @@
     "draft": "sonnet",
     "recap": "sonnet",
     "edit_learning": "sonnet",
-    "needs_reply": "haiku"
+    "needs_reply": "haiku",
+    "consulting_synthesis": "sonnet",
+    "proposal": "sonnet",
+    "pricing_frame": "sonnet",
+    "fact_check": "haiku",
+    "confidentiality": "haiku"
   },
   "inbox_triage": {
     "enabled": true,
@@ -114,5 +122,16 @@
     "inbox_triage": true,
     "course_deadlines": true,
     "ledger": true
+  },
+  "consulting": {
+    "agent_folder": "Consulting",
+    "max_questions": 12,
+    "call_minutes": 30,
+    "call_options": 3,
+    "call_window": {
+      "start": "09:00",
+      "end": "17:00"
+    },
+    "call_search_business_days": 10
   }
 }

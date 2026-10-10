@@ -77,3 +77,11 @@ Pulled forward from Phase 2 at the owner's request: the agent scans the inbox an
 
 ## v0.6.2 (2026-10-08): financial errands are tasks
 - Owner feedback: a to-do about calling Vanguard and logging in to an HSA was skipped as sensitive. The boundary is account data, not the topic. Errands are booked; only notes containing account data (secrets scan) or forwarded financial emails are skipped. 47 unit tests.
+
+## v0.4.0 (2026-10-09): consulting workforce
+From a real proposal that took a dozen rounds of `[CHECK]` fixes. Prospect and client work now goes: discovery, one batch of questions, a proposal ready to send, a cover email draft, and 3 call times.
+- **Team:** `consulting-lead` skill plus discovery-synthesizer, proposal-architect, pricing-analyst (Sonnet), fact-checker and confidentiality-reviewer (Haiku). The cover email reuses the drafter, with a new relationship-first brief.
+- **One batch of questions:** pass 1 writes a single Questions doc (at most 12, each with a recommended default). Pass 2 never writes `[CHECK]`. Gaps go back to the batch.
+- **Code gates:** `jobs/lib/facts.py` (fact table with sources, conflicts, untraced numbers, send-ready gate), `confidential.py` (client firewall), `pricing.py` (cost-basis ranges, never a fee). `slots.find_slots` returns 3 weekday call options. 56 unit tests.
+- **Product decisions:** the agent never picks a fee, and any overlap with another client is a question. Runs on demand only; the capture routine just flags a returned questionnaire.
+- Private `Pricing` and `Consulting Templates` docs added to setup. ADR 0008. Synthetic golden eval (`evals/consulting/`): the "before" doc is blocked (12 checks, 3 untraced numbers, a product leak); the golden output passes every gate.

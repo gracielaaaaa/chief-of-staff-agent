@@ -3,7 +3,7 @@
 Plain code, no model: the skill passes in events from the primary calendar
 and gets back a slot or null.
 
-Usage:
+Usage (add "count": 3 to get options on distinct days, e.g. client call times):
   python -m jobs.lib.slots '{"now": "...", "deadline": "...", "duration_min": 60,
                              "events": [{"start": "...", "end": "...",
                                          "colorId": "9", "transparency": "opaque"}]}'
@@ -106,7 +106,27 @@ def find_slot(now, deadline, duration_min, events, config, window=None):
     return None
 
 
+def find_slots(now, deadline, duration_min, events, config, count=3, window=None, weekdays_only=True):
+    """Up to `count` options on distinct days, for proposing call times to a client.
+    Nothing is booked: each pick only moves the search to the next day."""
+    tz = ZoneInfo(config.get("timezone", "America/Los_Angeles"))
+    out, cursor = [], now
+    while len(out) < count:
+        s = find_slot(cursor, deadline, duration_min, events, config, window)
+        if not s:
+            break
+        day = _parse(s["start"], tz).date()
+        if not (weekdays_only and day.weekday() >= 5):
+            out.append(s)
+        cursor = datetime.combine(day + timedelta(days=1), time(0, 0), tz).isoformat()
+    return out
+
+
 if __name__ == "__main__":
     args = json.loads(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read())
     cfg = json.loads((ROOT / "config.json").read_text())
-    print(json.dumps(find_slot(args["now"], args["deadline"], args["duration_min"], args.get("events", []), cfg, args.get("window"))))
+    if args.get("count"):
+        print(json.dumps(find_slots(args["now"], args["deadline"], args["duration_min"], args.get("events", []), cfg,
+                                    args["count"], args.get("window"))))
+    else:
+        print(json.dumps(find_slot(args["now"], args["deadline"], args["duration_min"], args.get("events", []), cfg, args.get("window"))))

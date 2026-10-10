@@ -1,0 +1,234 @@
+{
+  "_about": "Synthetic golden case for the consulting workforce (ADR 0008). Modeled on the 2026-10-09 pilot proposal: a 3x price conflict between call notes and the questionnaire, overlap with the client who made the introduction, no fee anchor, and a proposal that was late after a promise. All names are from evals/persona.",
+  "client": "Harbor Wellness Collective",
+  "today": "2026-10-09",
+  "introduced_by": {
+    "client": "Northwind Health Partners",
+    "person": "Lena Park"
+  },
+  "promise": {
+    "what": "send pilot proposal",
+    "to": "Dana Morales",
+    "due": "2026-10-03",
+    "source": "sent mail 2026-09-26"
+  },
+  "sources": [
+    {
+      "source": "questionnaire Q2",
+      "text": "We run 3 programs today: Peer Coach Training, Community Health Basics, and a caregiver workshop series."
+    },
+    {
+      "source": "questionnaire Q3",
+      "text": "Typical cohort is 20 participants."
+    },
+    {
+      "source": "questionnaire Q7",
+      "text": "Peer Coach Training is priced at $4,500 per cohort."
+    },
+    {
+      "source": "questionnaire Q9",
+      "text": "For a pilot we have set aside $6,000 to $9,000. We would like to start in January and keep it to 8 weeks."
+    },
+    {
+      "source": "questionnaire Q11",
+      "text": "Goal: grow enrollment from employer partners and prove outcomes to funders."
+    },
+    {
+      "source": "call notes 2026-09-24",
+      "text": "Dana: Peer Coach is about $1,500 per cohort. Board wants an outcomes story by spring. They are curious how Care Navigator Academy is priced."
+    },
+    {
+      "source": "email 2026-10-06",
+      "text": "Dana: Just checking in on the proposal, no rush, we are excited to see it."
+    }
+  ],
+  "facts": [
+    {
+      "key": "program count",
+      "value": "3 programs",
+      "source": "questionnaire Q2"
+    },
+    {
+      "key": "cohort size",
+      "value": "20 participants",
+      "source": "questionnaire Q3"
+    },
+    {
+      "key": "Peer Coach price",
+      "value": "$4,500 per cohort",
+      "source": "questionnaire Q7"
+    },
+    {
+      "key": "Peer Coach price",
+      "value": "$1,500 per cohort",
+      "source": "call notes 2026-09-24"
+    },
+    {
+      "key": "pilot budget",
+      "value": "$6,000 to $9,000",
+      "source": "questionnaire Q9"
+    },
+    {
+      "key": "pilot length",
+      "value": "8 weeks",
+      "source": "questionnaire Q9"
+    }
+  ],
+  "answers": [
+    {
+      "q": "Peer Coach price: questionnaire Q7 says $4,500 per cohort, call notes say $1,500 (3x). Which is right?",
+      "answer": "$4,500 per cohort (the $1,500 was a per-module figure)"
+    },
+    {
+      "q": "Their programs overlap with Northwind products. Mention, stay silent, or decline that scope?",
+      "answer": "Stay silent. Do not mention Northwind or its products."
+    },
+    {
+      "q": "What fee for each option?",
+      "answer": "Pilot $7,500 fixed. Full engagement $18,000."
+    },
+    {
+      "q": "How many workshops in the pilot?",
+      "answer": "2 workshops"
+    },
+    {
+      "q": "Full engagement length?",
+      "answer": "6 months"
+    }
+  ],
+  "resolved_facts": [
+    {
+      "key": "program count",
+      "value": "3 programs",
+      "source": "questionnaire Q2"
+    },
+    {
+      "key": "cohort size",
+      "value": "20 participants",
+      "source": "questionnaire Q3"
+    },
+    {
+      "key": "Peer Coach price",
+      "value": "$4,500 per cohort",
+      "source": "Graciela (questionnaire Q7)"
+    },
+    {
+      "key": "pilot length",
+      "value": "8 weeks",
+      "source": "questionnaire Q9"
+    },
+    {
+      "key": "pilot fee",
+      "value": "$7,500",
+      "source": "Graciela"
+    },
+    {
+      "key": "full fee",
+      "value": "$18,000",
+      "source": "Graciela"
+    },
+    {
+      "key": "pilot workshops",
+      "value": "2 workshops",
+      "source": "Graciela"
+    },
+    {
+      "key": "full length",
+      "value": "6 months",
+      "source": "Graciela"
+    }
+  ],
+  "other_client_terms": [
+    {
+      "client": "Northwind",
+      "term": "Northwind"
+    },
+    {
+      "client": "Northwind",
+      "term": "Care Navigator Academy"
+    },
+    {
+      "client": "Northwind",
+      "term": "Navigator Academy"
+    },
+    {
+      "client": "Northwind",
+      "term": "Community Health Worker Certificate"
+    },
+    {
+      "client": "Northwind",
+      "term": "Lena Park"
+    },
+    {
+      "client": "Northwind",
+      "term": "Omar Haddad"
+    },
+    {
+      "client": "Cedar Lane",
+      "term": "Cedar Lane"
+    },
+    {
+      "client": "Reyes",
+      "term": "Reyes Family Fund"
+    }
+  ],
+  "pricing_input": {
+    "rate": 150,
+    "options": [
+      {
+        "name": "Pilot",
+        "hours_low": 40,
+        "hours_high": 50
+      },
+      {
+        "name": "Full engagement",
+        "hours_low": 100,
+        "hours_high": 130
+      }
+    ],
+    "anchors": [
+      {
+        "label": "their Peer Coach price",
+        "value": 4500,
+        "source": "questionnaire Q7"
+      }
+    ],
+    "budget": {
+      "low": 6000,
+      "high": 9000,
+      "source": "questionnaire Q9"
+    },
+    "levers": [
+      {
+        "name": "one workshop instead of two",
+        "hours_delta": -8
+      },
+      {
+        "name": "skip funder outcomes brief",
+        "hours_delta": -10
+      }
+    ]
+  },
+  "calendar": {
+    "now": "2026-10-10T00:00:00-07:00",
+    "deadline": "2026-10-23T17:00:00-07:00",
+    "events": [
+      {
+        "start": "2026-10-12T09:00:00-07:00",
+        "end": "2026-10-12T12:30:00-07:00",
+        "colorId": "3"
+      },
+      {
+        "start": "2026-10-12T12:30:00-07:00",
+        "end": "2026-10-12T17:00:00-07:00",
+        "colorId": "5"
+      },
+      {
+        "start": "2026-10-13T09:00:00-07:00",
+        "end": "2026-10-13T10:30:00-07:00",
+        "transparency": "opaque"
+      }
+    ],
+    "_note": "Search starts the next day; Saturday and Sunday are skipped, Monday is fully protected (class and GSI colors), so the options are Tue 10:30, Wed 9:00, Thu 9:00."
+  }
+}

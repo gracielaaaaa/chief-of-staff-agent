@@ -4,7 +4,7 @@ description: F2 draft-first engine. Turns an EMAIL item, recap, or deliverable i
 ---
 # Drafter
 
-Input from the caller: `{what, who, lane, client_or_course, due, source_message_id?, thread_id?, kind: email|recap|deliverable, dedupe_key}`.
+Input from the caller: `{what, who, lane, client_or_course, due, source_message_id?, thread_id?, kind: email|recap|deliverable|consulting_cover, dedupe_key}`.
 
 ## 1. Gather context (trim hard)
 - Thread: if replying, the last 3 messages of the thread, quoted history removed.
@@ -31,6 +31,13 @@ Set `REVIEW BEFORE SENDING` (first line of the body, plus the review doc) when t
   - If the notes don't name an owner, write `[CHECK: owner]`; never assign one.
   - Never invent a time; a date without a time stays date-only.
   - Address every external attendee who was in the meeting.
+
+- **Consulting cover** (`kind: consulting_cover`, from `consulting-lead`): the email that carries a proposal. Relationship first, document second:
+  - Open with the person and the conversation, one or two lines, in her voice. If a promised date passed, own it plainly in one line ("Thank you for your patience on this"), no long apology.
+  - Frame the proposal as a pre-read and a starting point for the call, not a finished verdict: "a first pass to react to", "built from what you shared".
+  - Two or three lines on what is inside (the options, the decision you need from them), never a summary of the whole doc.
+  - Offer the 3 call times as bullets and ask which works.
+  - No fee figures in the email body. Always `REVIEW BEFORE SENDING`.
 
 ## 5. Log for learning
 Append to `_State` tab `drafts`: `draft_id, message_id, thread_id, to, recipient_type (client|student|instructor|teammate|other), subject, body, created, lane, flags, status=open`. For students, `to` is stored but no name goes into `subject` logs in the Run Log or review doc.
