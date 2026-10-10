@@ -14,6 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
+from jobs.lib import folders  # noqa: E402
 from jobs.lib.sensitive import find_secrets  # noqa: E402
 
 # Allow list, not block list: any connector tool not named here is blocked,
@@ -45,6 +46,31 @@ HARNESS_SERVERS = re.compile(
 # Structural deletes inside otherwise-allowed batch edits (Sheets/Docs).
 # Ledger rows are never removed; they get status=dropped instead.
 DESTRUCTIVE_REQUESTS = re.compile(r'"(deleteSheet|deleteDimension|deleteDocumentTab|deleteTab)"')
+
+
+# Drive writes that place a file must name a parent inside the agent's own folder.
+PLACES_FILE = {"create_file", "update_file"}
+FOLDER_MIME = "application/vnd.google-apps.folder"
+
+
+def outside_folder(suffix: str, tool_input: dict, env: dict, config: dict) -> str:
+    """Reason to block, or "" if the file lands in Chief of Staff (or is the root folder itself)."""
+    ti = tool_input or {}
+    parents = [v for k, v in ti.items() if "parent" in k.lower() and isinstance(v, str) and v]
+    parents += [p for k, v in ti.items() if "parent" in k.lower() and isinstance(v, list) for p in v]
+    if suffix == "update_file" and not parents:
+        return ""  # rename or content update, nothing moves
+    root_name = (config.get("drive") or {}).get("root_folder_name", "Chief of Staff")
+    if (suffix == "create_file" and ti.get("title") == root_name
+            and FOLDER_MIME in (ti.get("contentMimeType"), ti.get("mimeType"))):
+        return ""  # setup creating the root folder
+    allowed = folders.load(env)
+    if not parents:
+        return "names no parent folder"
+    if not allowed:
+        return "has no list of allowed folders (run-common Start writes it)"
+    bad = [p for p in parents if p not in allowed]
+    return "targets a folder outside Chief of Staff" if bad else ""
 
 
 def tool_suffix(name: str) -> str:
@@ -94,6 +120,13 @@ def decide(tool_name: str, env: dict, config: dict, tool_input=None) -> tuple[bo
                 "Financial details and login credentials never go into drafts, sheets, docs, or events. "
                 "Skip that content, log 'skipped: sensitive', and continue."
             )
+        if suffix in PLACES_FILE:
+            why = outside_folder(suffix, tool_input, env, config)
+            if why:
+                return False, (
+                    f"BLOCKED by guardrail: this '{suffix}' {why}. Files are created only inside the "
+                    "Chief of Staff folder. Write the intended file into the review doc instead."
+                )
         if truthy(env.get("DRY_RUN")) or config.get("dry_run"):
             return False, (
                 f"DRY RUN: '{suffix}' was not executed. Print the intended action "

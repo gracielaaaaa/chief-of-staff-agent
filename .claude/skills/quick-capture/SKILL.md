@@ -6,6 +6,8 @@ description: Interactive version of the capture routine. Graciela types to-dos, 
 
 Same rules as `.claude/skills/dispatcher/SKILL.md` and CLAUDE.md. The difference: the input is what Graciela types here, and she is present, so show results immediately and ask instead of guessing.
 
+Before the first write in a session, do `run-common` Start step 3 (resolve the Drive folders by name and run `python3 -m jobs.lib.folders set ...`), or the guardrail blocks every Drive file create.
+
 ## When she types items
 1. Split the message into atomic items. Classify each (lane, action, due, duration) using the `classifier` subagent rules. If an item is ambiguous (lane, date, who), ask ONE short batched question before acting.
 2. Act exactly as the dispatcher does:

@@ -85,3 +85,7 @@ From a real proposal that took a dozen rounds of `[CHECK]` fixes. Prospect and c
 - **Code gates:** `jobs/lib/facts.py` (fact table with sources, conflicts, untraced numbers, send-ready gate), `confidential.py` (client firewall), `pricing.py` (cost-basis ranges, never a fee). `slots.find_slots` returns 3 weekday call options. 56 unit tests.
 - **Product decisions:** the agent never picks a fee, and any overlap with another client is a question. Runs on demand only; the capture routine just flags a returned questionnaire.
 - Private `Pricing` and `Consulting Templates` docs added to setup. ADR 0008. Synthetic golden eval (`evals/consulting/`): the "before" doc is blocked (12 checks, 3 untraced numbers, a product leak); the golden output passes every gate.
+
+## v0.4.1 (2026-10-09): Drive folder check in the guardrail
+- The guardrail now checks where Drive files go. `create_file` and moves must target the `Chief of Staff` folder or a folder inside it; anything else, a missing parent, or a missing folder list is blocked. Found while deciding whether to stop approving each Drive create by hand: the hook allowed `create_file` anywhere in Drive, and the one-folder rule lived only in CLAUDE.md.
+- Folder ids stay out of the repo: `run-common` Start resolves them by name and writes gitignored `state/allowed_folders.json` (`jobs/lib/folders.py`). Setup may still create the root folder itself. 59 unit tests.
