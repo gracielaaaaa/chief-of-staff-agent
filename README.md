@@ -5,7 +5,7 @@ An AI agent that turns blank-page work into drafts you only have to review, and 
 Built by Graciela de Leon (UC Berkeley MBA/MPH) for herself as user zero. **Read the [case study](docs/case-study.md)** (draft, week 1).
 
 ## The problem
-The bottleneck isn't time, it's starting. Emails, meeting recaps, and deliverables sit undone because they begin as a blank page, and follow-ups promised in meetings and group chats slip through the cracks.
+People juggling several roles (school, teaching, client work) lose hours to blank-page starts: emails, meeting recaps, and deliverables wait because each one begins empty. And the commitments made in meetings and group chats live in a dozen places, so keeping track of them is manual work.
 
 ## What it does
 | Capability | How |

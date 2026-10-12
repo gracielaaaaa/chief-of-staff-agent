@@ -3,12 +3,12 @@
 *Graciela de Leon, UC Berkeley MBA/MPH. Draft, week 1 of 4. Outcome metrics marked "pending" fill in as real usage accumulates.*
 
 ## TL;DR
-I built an agent that turns my blank-page work into drafts I only have to review, and makes sure every commitment I make gets done. It runs four times a day in the cloud against my real Gmail, Calendar, Drive, Granola meeting notes, and Canvas. In week 1 it went from spec to running in the cloud within about a day. The most useful finding: **synthetic evals passed at 100% while real-data dry runs found [21 issues](issues-found.md) they missed**, from a student's name leaking into a log to tasks booked before stores open.
+I built an agent that turns blank-page work into drafts I only have to review, and keeps a live ledger of every commitment from my meetings and email. It runs four times a day in the cloud against my real Gmail, Calendar, Drive, Granola meeting notes, and Canvas. In week 1 it went from spec to running in the cloud within about a day. The most useful finding: **synthetic evals passed at 100% while real-data dry runs found [21 issues](issues-found.md) they missed**, from a student's name leaking into a log to tasks booked before stores open.
 
 ## The problem (user zero: me)
-I'm a dual-degree student, a teaching assistant for two courses, and an independent consultant. My bottleneck isn't time, it's starting. Emails, meeting recaps, and course work sit undone because they begin as a blank page. What slips through: follow-ups I promised in meetings and group chats.
+I'm a dual-degree student, a teaching assistant for two courses, and an independent consultant. Three roles means a steady stream of email, recaps, and deliverables, and most of it starts as a blank page. The commitments made along the way live in meeting notes, email threads, and group chats, with no single place to see them.
 
-So the job isn't "an assistant that does tasks." It's **"never let me face a blank page, and never let a promise go untracked,"** without ever acting on my behalf where a mistake costs trust.
+So the job isn't "an assistant that does tasks." It's **"start every piece of work from a draft, and keep every commitment in one place,"** without ever acting on my behalf where a mistake costs trust.
 
 ## What it does
 | Capability | How it works |
