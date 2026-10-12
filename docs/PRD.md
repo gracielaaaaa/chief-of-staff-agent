@@ -12,7 +12,7 @@ Writing rule for everything this system produces (emails, docs, briefs, digests,
 
 ## 1. Problem
 
-Graciela is a dual MBA/MPH student at UC Berkeley, a GSI, and an independent consultant. Her bottleneck is not time, it is starting. She procrastinates on blank-page work (emails, meeting prep and recaps, deliverables) and on work that feels too big. What falls through the cracks: follow-ups she owes (mostly from client meetings and group project chats) and ideas that never get captured or revisited.
+Graciela is a dual MBA/MPH student at UC Berkeley, a GSI, and an independent consultant. Across three roles, most of her work starts as a blank page (emails, meeting prep and recaps, deliverables), and large work is hard to break into first steps. Commitments made in client meetings and group project chats are scattered across notes, email, and chat, and ideas are rarely captured somewhere she will revisit.
 
 ## 2. Goals and non-goals
 
