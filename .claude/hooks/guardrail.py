@@ -38,12 +38,14 @@ WRITE = {
 }
 
 # Kit (newsletter platform) draft-building actions, allowed on the Kit connector only.
-# Everything created this way is unpublished; publishing, sending, and deleting stay
+# Emails are created and edited unpublished; publishing, sending, and deleting stay
 # blocked because they are not on any list. The Kit connector's server id lives in
 # state/kit_connector.txt (gitignored) or the KIT_CONNECTOR env var; without it, none of these run.
 KIT_DRAFTS = {
     "create_sequence", "create_sequence_email", "create_landing_page",
     "create_custom_field", "bulk_create_custom_fields", "create_tag", "bulk_create_tags",
+    "update_sequence_email",   # emails stay unpublished (published: true is blocked)
+    "update_landing_page",     # Graciela approved edits to the published signup page
 }
 KIT_FILE = ROOT / "state" / "kit_connector.txt"
 
