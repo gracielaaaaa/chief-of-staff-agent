@@ -37,6 +37,37 @@ WRITE = {
     "update_doc",                                         # Docs
 }
 
+# Kit (newsletter platform) draft-building actions, allowed on the Kit connector only.
+# Everything created this way is unpublished; publishing, sending, and deleting stay
+# blocked because they are not on any list. The Kit connector's server id lives in
+# state/kit_connector.txt (gitignored) or the KIT_CONNECTOR env var; without it, none of these run.
+KIT_DRAFTS = {
+    "create_sequence", "create_sequence_email", "create_landing_page",
+    "create_custom_field", "bulk_create_custom_fields", "create_tag", "bulk_create_tags",
+}
+KIT_FILE = ROOT / "state" / "kit_connector.txt"
+
+
+def kit_connector(env: dict) -> str:
+    if env.get("KIT_CONNECTOR"):
+        return env["KIT_CONNECTOR"].strip()
+    try:
+        return KIT_FILE.read_text().strip()
+    except OSError:
+        return ""
+
+
+def kit_block(tool_name: str, suffix: str, env: dict, tool_input) -> str:
+    """Reason to block a Kit draft action, or "" if it may run."""
+    kit = kit_connector(env)
+    server = tool_name.split("__")[1] if tool_name.count("__") >= 2 else ""
+    if not kit or server != kit:
+        return f"BLOCKED by guardrail: '{suffix}' is only allowed on the Kit connector."
+    if (tool_input or {}).get("published") is True:
+        return "BLOCKED by guardrail: Kit content is created unpublished. Graciela publishes it in Kit."
+    return ""
+
+
 # Harness and session tools, not data connectors. Not used by scheduled jobs.
 HARNESS_SERVERS = re.compile(
     r"^mcp__(ccd_[a-z_]+|mcp-registry|visualize|Claude_Browser|Claude_Code_iOS_Simulator|terminal|scheduled-tasks)__"
@@ -101,7 +132,11 @@ def decide(tool_name: str, env: dict, config: dict, tool_input=None) -> tuple[bo
             f"BLOCKED by guardrail: '{suffix}' reads attachments or downloads files, which this "
             "agent never does (financial and personal documents live there)."
         )
-    if not READ.match(suffix) and suffix not in WRITE:
+    if suffix in KIT_DRAFTS:
+        why = kit_block(tool_name, suffix, env, tool_input)
+        if why:
+            return False, why
+    if not READ.match(suffix) and suffix not in WRITE and suffix not in KIT_DRAFTS:
         return False, (
             f"BLOCKED by guardrail: '{suffix}' is not on the allow list. This agent only "
             "reads, creates drafts, events, and files in its own folder. Record the intended "
@@ -112,7 +147,7 @@ def decide(tool_name: str, env: dict, config: dict, tool_input=None) -> tuple[bo
             "BLOCKED by guardrail: deleting sheets, rows, columns, or tabs is never allowed. "
             "Mark ledger items status=dropped instead."
         )
-    if suffix in WRITE:
+    if suffix in WRITE or suffix in KIT_DRAFTS:
         secrets = find_secrets(json.dumps(tool_input or {}, ensure_ascii=False))
         if secrets:
             return False, (
