@@ -6,7 +6,7 @@ Blocks are on the calendar in green. A weekday 7am task (`mba293-study-blocks`) 
 |---|---|---|---|---|
 | 1 | Wed Nov 4 | 0.5 | Review and send project description to faculty sponsor | todo |
 | 2 | Fri Nov 6 | 2 | Regression set, convert issues 1 to 14 into synthetic cases | built |
-| 3 | Mon Nov 9 | 1 | Review and send implementation plan | built |
+| 3 | Mon Nov 9 | 1 | Review and send implementation plan | done |
 | 4 | Tue Nov 10 | 2 | Regression set, convert issues 15 to 28 | todo |
 | 5 | Wed Nov 11 | 2 | Injection red-team set, write attack cases | todo |
 | 6 | Thu Nov 12 | 2 | Injection red-team set, wire cases into the harness | todo |
