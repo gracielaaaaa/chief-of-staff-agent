@@ -1,0 +1,14 @@
+{"id": "r06a", "issue": 6, "task": "calendar_match", "input": {"item": "pilates with Helena thursday 7am", "events": [{"title": "arrive at Hele's", "start": "2026-11-12T06:50"}]}, "expected": {"already_on_calendar": true}}
+{"id": "r06b", "issue": 6, "task": "calendar_match", "input": {"item": "go to HIST 20 section friday 9am", "events": [{"title": "HIST 20 DIS 201", "start": "2026-11-13T09:00"}]}, "expected": {"already_on_calendar": true}}
+{"id": "r06c", "issue": 6, "task": "calendar_match", "input": {"item": "call Lena about the landscape doc tuesday 3pm", "events": [{"title": "Dentist", "start": "2026-11-10T15:00"}]}, "expected": {"already_on_calendar": false}}
+{"id": "r06d", "issue": 6, "task": "calendar_match", "input": {"item": "dinner with Sam friday 7pm", "events": [{"title": "Dinner w/ Jordan", "start": "2026-11-13T19:00"}]}, "expected": {"already_on_calendar": false}}
+{"id": "r12a", "issue": 12, "task": "promise", "input": {"to": "student", "snippet": "Hi Jamie, I'll share your exam with DSP by Friday so the accommodation is in place."}, "expected": {"promise": true, "who_type": "student"}}
+{"id": "r12b", "issue": 12, "task": "promise", "input": {"to": "student", "snippet": "Hi Chris, I will post your makeup quiz grade on Monday."}, "expected": {"promise": true, "who_type": "student"}}
+{"id": "r13a", "issue": 13, "task": "promise", "input": {"to": "teammate", "snippet": "Running late, I'll be there by 12:20."}, "expected": {"promise": false}}
+{"id": "r13b", "issue": 13, "task": "promise", "input": {"to": "instructor", "snippet": "I'll stop by your office today after section."}, "expected": {"promise": false}}
+{"id": "r13c", "issue": 13, "task": "promise", "input": {"to": "student", "snippet": "No deductions will be made for the late upload."}, "expected": {"promise": false}}
+{"id": "r13d", "issue": 13, "task": "promise", "input": {"to": "client", "snippet": "Thanks Lena, sounds good.\n\nOn Mon, Nov 9, 2026 at 9:00 AM Lena Park wrote:\n> I'll send the revised scope by Friday."}, "expected": {"promise": false}}
+{"id": "r14a", "issue": 14, "task": "promise", "input": {"to": "self", "snippet": "I need to share the midterm with DSP at least 4 days before the exam on Nov 20."}, "expected": {"promise": true, "due": "2026-11-16"}}
+{"id": "r14b", "issue": 14, "task": "promise", "input": {"to": "teammate", "snippet": "I have to submit our workbook section by Sunday night."}, "expected": {"promise": true}}
+{"id": "r14c", "issue": 14, "task": "promise", "input": {"to": "student", "snippet": "You'll receive credit for the reflection once I see it in the portal."}, "expected": {"promise": true, "who_type": "student"}}
+{"id": "r14d", "issue": 14, "task": "promise", "input": {"to": "client", "snippet": "I'll get back to you with the revised timeline by Thursday."}, "expected": {"promise": true}}
