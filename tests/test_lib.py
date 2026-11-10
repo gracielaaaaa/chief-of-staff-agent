@@ -317,6 +317,13 @@ class Sensitive(unittest.TestCase):
         self.assertIn("one-time code", sensitive.find_secrets("Your verification code is 482913"))
         self.assertIn("password", sensitive.find_secrets("password: hunter22"))
 
+    def test_detects_account_numbers_written_conversationally(self):
+        for t in ["my routing number is 121000248", "account number ends in 99887766",
+                  "acct was 44556677"]:
+            self.assertIn("bank account detail", sensitive.find_secrets(t), t)
+        for ok in ["the account is now active", "account was created in 2026"]:
+            self.assertEqual(sensitive.find_secrets(ok), [], ok)
+
     def test_ignores_normal_work_content(self):
         for ok in ["https://mail.google.com/mail/#all?compose=thread-f:1877961163425134275",
                    "key=task:14f4d860f62f2819 canvas 9102497", "Room 1102, due 2026-10-16",
