@@ -92,3 +92,9 @@ From a real proposal that took a dozen rounds of `[CHECK]` fixes. Prospect and c
 
 ## v0.4.2 (2026-10-10): value and ROI analyst
 - New `value-analyst` subagent (Sonnet): frames every engagement by the client's return (baseline, target, measure, payback in their units) in pass 1, and reads the proposal as the client in pass 2 as part of the send-ready gate. Proposal architect now leads with value. ADR 0008 amended.
+
+## Unreleased (branch claude/mba293-study): regression suite for real-data issues
+- `tests/test_regression.py`: one test per real-data issue in `docs/issues-found.md` (code behavior, plus text pins for prompt-only fixes). Model-layer cases in `evals/regression/model_cases.jsonl` with `evals/regression/score.py`. Per-issue status in `evals/regression/coverage.md`: 25 of 28 reproducible offline, at least in part.
+- `jobs/lib/filters.py`: the sender allowlist and the label screen moved from skill prose into tested code; dispatcher and inbox-triage call it.
+- `run-common`: `config.json` is the source of truth when a routine prompt disagrees (issue 19's fix was not in the repo before).
+- Fix: the secrets scan missed account numbers written conversationally ("my routing number is ..."). Found by the issue 27 regression test.

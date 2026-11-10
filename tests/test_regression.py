@@ -10,7 +10,7 @@ import re
 import unittest
 from pathlib import Path
 
-from jobs.lib import diff, filters, promises, slots
+from jobs.lib import diff, filters, promises, review, sensitive, slots
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("guardrail", ROOT / ".claude/hooks/guardrail.py")
@@ -28,6 +28,10 @@ CFG = {
 # Gmail system labels a user label cannot reuse (case-insensitive).
 GMAIL_RESERVED = {"inbox", "sent", "draft", "drafts", "spam", "trash", "starred", "important",
                   "unread", "chat", "chats", "all mail", "scheduled", "snoozed"}
+
+
+def read(rel):
+    return (ROOT / rel).read_text()
 
 
 def allowed(tool, tool_input=None):
@@ -110,6 +114,46 @@ class RealDataRegressions(unittest.TestCase):
             self.assertEqual(item["who"], "student", what)
 
 
+class RealDataRegressions15to28(unittest.TestCase):
+    def test_issue_15_first_run_stale_items_become_one_question(self):
+        stale = [{"due": "2026-09-%02d" % d} for d in range(10, 30, 3)]
+        self.assertTrue(all(promises.triage(i, "2026-10-08") == "confirm" for i in stale))
+        self.assertEqual(promises.triage({"due": "2026-10-12"}, "2026-10-08"), "open")
+
+    def test_issue_17_four_deadlines_do_not_pack_one_morning(self):
+        now, booked = "2026-10-05T08:00:00-07:00", []
+        for due in ["2026-10-09", "2026-10-12", "2026-10-14", "2026-10-16"]:
+            deadline = due + "T21:00:00-07:00"
+            s = slots.find_slot(slots.planning_start(now, deadline), deadline, 60, booked, CFG)
+            booked.append(s)
+        days = {b["start"][:10] for b in booked}
+        self.assertGreaterEqual(len(days), 3, booked)
+
+    def test_issue_18_focus_time_marked_free_still_blocks(self):
+        focus = {"start": "2026-10-08T08:00:00-07:00", "end": "2026-10-08T11:00:00-07:00",
+                 "transparency": "transparent", "eventType": "FOCUS_TIME"}
+        s = slots.find_slot("2026-10-08T08:00:00-07:00", "2026-10-09T00:00:00-07:00", 60, [focus], CFG)
+        self.assertGreaterEqual(s["start"], "2026-10-08T11:00:00-07:00")
+
+    def test_issue_26_review_block_is_plain_text_for_append(self):
+        txt = review.render_text("17:00", {"needs_you": [{"text": "Confirm the reader meeting time"}]})
+        self.assertNotIn("<", txt)
+        self.assertTrue(txt.startswith("\nRun 17:00\n"))
+
+    def test_issue_27_financial_errand_is_a_task_not_a_secret(self):
+        for note in ["call the bank about my 401(k) rollover, 30 min",
+                     "log in to my HSA and download nothing, just check the claim status",
+                     "book 20 min to move my IRA to the new provider"]:
+            self.assertEqual(sensitive.find_secrets(note), [], note)
+        self.assertNotEqual(sensitive.find_secrets("my routing number is 121000248"), [])
+
+    def test_issue_28_attachments_blocked_drive_images_readable(self):
+        for t in ["get_message_attachment", "get_meeting_attachment", "download_file_content",
+                  "download_course_file"]:
+            self.assertFalse(allowed(t), t)
+        self.assertTrue(allowed("read_file_content"))
+
+
 class SkillTextBackstops(unittest.TestCase):
     """Rules whose fix is prompt text: pin the text so a later edit cannot drop them."""
 
@@ -117,6 +161,37 @@ class SkillTextBackstops(unittest.TestCase):
         text = (ROOT / ".claude/agents/classifier.md").read_text()
         self.assertTrue(re.search(r"same-day logistics", text, re.I), "issue 13 exclusion missing")
         self.assertTrue(re.search(r"I need to", text), "issue 14 obligation rule missing")
+
+    def test_issue_15_first_run_lookback_rule(self):
+        self.assertIn("First run (no cursor): look back 7 days only", read(".claude/skills/ledger/SKILL.md"))
+
+    def test_issue_16_meeting_filter_reads_notes(self):
+        self.assertIn("also keep meetings whose notes name other people or a client",
+                      read(".claude/skills/ledger/SKILL.md"))
+
+    def test_issue_19_config_is_source_of_truth(self):
+        self.assertIn("It is the source of truth", read(".claude/skills/run-common/SKILL.md"))
+
+    def test_issue_20_cursors_and_clock(self):
+        text = read(".claude/skills/run-common/SKILL.md")
+        self.assertIn("Advance cursors on quiet runs too", text)
+        self.assertIn("date -u +%Y-%m-%dT%H:%M:%SZ", text)
+
+    def test_issue_21_capture_routine_lists_granola(self):
+        row = next(l for l in read("docs/routines.md").splitlines() if l.startswith("| capture"))
+        for connector in ["Gmail", "Calendar", "Drive", "Sheets", "Docs", "Granola"]:
+            self.assertIn(connector, row)
+
+    def test_issue_25_names_in_search_ids_only_for_labeling(self):
+        text = read(".claude/skills/run-common/SKILL.md")
+        self.assertIn("searching by label id silently returns nothing", text)
+        self.assertIn("Label ids are only for", text)
+
+    def test_issue_26_review_doc_never_read_back(self):
+        self.assertIn("NEVER read it back", read(".claude/skills/run-common/SKILL.md"))
+
+    def test_issue_27_errands_are_tasks(self):
+        self.assertIn("Financial **errands**", read(".claude/skills/dispatcher/SKILL.md"))
 
     def test_issue_05_and_09_skills_call_the_code_filters(self):
         disp = (ROOT / ".claude/skills/dispatcher/SKILL.md").read_text()

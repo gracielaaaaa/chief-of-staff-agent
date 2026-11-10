@@ -12,3 +12,9 @@
 {"id": "r14b", "issue": 14, "task": "promise", "input": {"to": "teammate", "snippet": "I have to submit our workbook section by Sunday night."}, "expected": {"promise": true}}
 {"id": "r14c", "issue": 14, "task": "promise", "input": {"to": "student", "snippet": "You'll receive credit for the reflection once I see it in the portal."}, "expected": {"promise": true, "who_type": "student"}}
 {"id": "r14d", "issue": 14, "task": "promise", "input": {"to": "client", "snippet": "I'll get back to you with the revised timeline by Thursday."}, "expected": {"promise": true}}
+{"id": "r16a", "issue": 16, "task": "meeting_filter", "input": {"participants": ["maya (owner)"], "title": "Northwind offsite", "notes": "Lena and Omar walked through the training roadmap. I owe Lena the landscape doc v3 by Friday."}, "expected": {"keep": true}}
+{"id": "r16b", "issue": 16, "task": "meeting_filter", "input": {"participants": ["maya (owner)"], "title": "Untitled", "notes": "Reading notes for PH 230 week 9: self-efficacy and stages of change."}, "expected": {"keep": false}}
+{"id": "r16c", "issue": 16, "task": "meeting_filter", "input": {"participants": ["maya (owner)"], "title": "Group 7 workbook call", "notes": "Taylor and Dana split the sections. I'll draft the intro by Sunday."}, "expected": {"keep": true}}
+{"id": "r27a", "issue": 27, "task": "capture", "input": {"note": "call the bank about my 401k rollover, put a 30 min block this week"}, "expected": {"action": "TASK", "skipped": false}}
+{"id": "r27b", "issue": 27, "task": "capture", "input": {"note": "log in to my HSA and check if the claim went through"}, "expected": {"action": "TASK", "skipped": false}}
+{"id": "r27c", "issue": 27, "task": "capture", "input": {"note": "fwd: Your statement is ready. Account ending 4821, balance attached."}, "expected": {"skipped": true}}

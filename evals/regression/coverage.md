@@ -20,8 +20,33 @@ Layers: **code** = deterministic test in `tests/test_regression.py`. **model** =
 | 12 | Student name in a ledger row | covered | code, model | Code backstop `redact_who` plus 2 model cases |
 | 13 | Same-day logistics counted as promises | covered | model, text | 4 negatives, including quoted text and decisions already made |
 | 14 | "I need to" obligations lost | covered | model, text | 4 positives, including the exam deadline |
-| 15 to 28 | | pending | | Block 4 (Nov 10) |
+| 15 | First run would backfill a month of stale tasks | covered | code, text | Past-due items become one question; 7-day first-run rule pinned |
+| 16 | Granola listed only the owner at a client retreat | covered | model, text | Notes-based filter pinned; 3 model cases (2 keep, 1 solo note) |
+| 17 | Earliest-fit packed four tasks into one morning | covered | code | Four deadlines spread across at least 3 days |
+| 18 | Focus time marked "free" was booked over | covered | code | Focus time blocks even when transparent |
+| 19 | Cloud run followed a stale prompt line over config | covered | text | **Gap found:** the fix lived only in the cloud routine prompt, not in the repo. Added "config.json is the source of truth" to run-common and pinned it |
+| 20 | Cursors stuck on quiet runs; a timestamp off by an hour | partly | text | Both rules pinned; real cursor writes are live-only |
+| 21 | Meeting connector missing from the cloud routine | partly | text, connector | routines.md must list every connector capture needs; the routine's actual attachments are live config |
+| 22 | 12-day-old client promise outside the 7-day lookback | open, not fixed | none | No fix exists yet, so there is nothing to test. Candidate for a fix block |
+| 23 | Deleted agent event leaves its ledger item open | open, not fixed | none | No fix exists yet. Candidate for a fix block |
+| 24 | One chat for every project overloaded it | not testable | none | Process change (one session per workstream), not system behavior |
+| 25 | Search by label id silently returned nothing | partly | text, connector | Rule pinned (names in search, ids only for labeling); the Gmail behavior is live-only |
+| 26 | Review doc grew past the read limit | covered | code, text | Plain-text append block; "never read it back" pinned |
+| 27 | Her own financial errand skipped as "financial details" | covered | code, model, text | Errands pass the secrets scan; 3 model cases. **Bug found:** the scan missed "my routing number is ..." (only "Routing number: ..." matched). Fixed in `jobs/lib/sensitive.py` |
+| 28 | Receipt photos arrive as blocked attachments | partly | code | Attachments and downloads stay blocked; Drive file reads allowed. The "save to Drive?" prompt is still a candidate feature |
 
-## Summary so far (issues 1 to 14)
-- Covered: 11 (issues 13 and 14 need a model run to score). Partly covered: 2 (issues 2 and 4, whose connector half cannot be reproduced offline). Model only: 1 (issue 6).
-- Finding: 2 of the fixes (issues 5 and 9) existed only as prose in a skill, with no code a test could check. They are now code. That is the pattern this study looks for: rules enforced only by prompt are the ones a synthetic eval cannot catch regressing.
+## Summary (all 28 issues)
+| Status | Count | Issues |
+|---|---|---|
+| Covered | 18 | 1, 3, 5, 7 to 19, 26, 27 (13 to 16 and 27 also need a model run) |
+| Partly covered | 6 | 2, 4, 20, 21, 25, 28 (the connector half is live-only) |
+| Model only | 1 | 6 |
+| Open, no fix yet | 2 | 22, 23 |
+| Not testable | 1 | 24 |
+
+That is 25 of 28 reproducible offline, at least in part (target: 20). Every "partly" is partly for the same reason: the failure came from how a live connector behaves, which no offline test can see.
+
+## Findings
+1. **Prompt-only fixes regress silently.** Three fixes (issues 5, 9, and 19) existed only as prose, and one (19) was not even in the repo: it lived in the cloud routine's prompt. Issues 5 and 9 are now code with tests. Issue 19 is now versioned text with a test that pins it.
+2. **Writing tests found a live bug.** The regression test for issue 27 showed the guardrail's secrets scan missed account numbers written conversationally ("my routing number is ..."). The guardrail hook uses that scan, so a note like that could have been written to a sheet. Fixed and covered.
+3. **Connector behavior is the hard limit.** The 6 partly covered issues all trace to live Gmail, Drive, or routine configuration. Closing that gap needs a recorded-response replay or a live smoke test, not more synthetic cases.
