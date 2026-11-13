@@ -46,6 +46,7 @@ KIT_DRAFTS = {
     "create_custom_field", "bulk_create_custom_fields", "create_tag", "bulk_create_tags",
     "update_sequence_email",   # emails stay unpublished (published: true is blocked)
     "update_landing_page",     # Graciela approved edits to the published signup page
+    "create_broadcast", "update_broadcast",  # always drafts; scheduling and sending stay in Kit's UI
 }
 KIT_FILE = ROOT / "state" / "kit_connector.txt"
 
@@ -67,6 +68,8 @@ def kit_block(tool_name: str, suffix: str, env: dict, tool_input) -> str:
         return f"BLOCKED by guardrail: '{suffix}' is only allowed on the Kit connector."
     if (tool_input or {}).get("published") is True:
         return "BLOCKED by guardrail: Kit content is created unpublished. Graciela publishes it in Kit."
+    if (tool_input or {}).get("public") is True:
+        return "BLOCKED by guardrail: broadcasts stay off the public newsletter site. Graciela publishes in Kit."
     return ""
 
 
