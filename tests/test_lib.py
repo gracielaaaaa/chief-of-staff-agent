@@ -96,13 +96,14 @@ class Guardrail(unittest.TestCase):
     def test_kit_drafts_only_on_kit_connector(self):
         kit, env = "mcp__kit123__", {"KIT_CONNECTOR": "kit123"}
         for t in ["create_sequence", "create_sequence_email", "create_landing_page", "bulk_create_tags",
-                  "update_sequence_email", "update_landing_page"]:
+                  "update_sequence_email", "update_landing_page", "create_broadcast", "update_broadcast"]:
             self.assertTrue(guardrail.decide(kit + t, env, {}, {"name": "x"})[0], t)
             self.assertFalse(guardrail.decide(GMAIL + t, env, {}, {"name": "x"})[0], t)
             self.assertFalse(guardrail.decide(kit + t, {}, {}, {"name": "x"})[0], t)
         self.assertFalse(guardrail.decide(kit + "create_sequence_email", env, {}, {"published": True})[0])
         self.assertFalse(guardrail.decide(kit + "update_sequence_email", env, {}, {"published": True})[0])
-        for t in ["create_broadcast", "update_broadcast", "delete_sequence", "delete_sequence_email",
+        self.assertFalse(guardrail.decide(kit + "create_broadcast", env, {}, {"public": True})[0])
+        for t in ["delete_broadcast", "delete_sequence", "delete_sequence_email",
                   "add_subscriber_to_sequence", "create_subscriber", "create_webhook"]:
             self.assertFalse(guardrail.decide(kit + t, env, {}, {})[0], t)
         self.assertFalse(guardrail.decide(kit + "create_sequence", dict(env, DRY_RUN="1"), {}, {})[0])
