@@ -10,7 +10,7 @@ Blocks are on the calendar in green. A weekday 7am task (`mba293-study-blocks`) 
 | 4 | Tue Nov 10 | 2 | Regression set, convert issues 15 to 28 | built |
 | 5 | Wed Nov 11 | 2 | Injection red-team set, write attack cases | built |
 | 6 | Thu Nov 12 | 2 | Injection red-team set, wire cases into the harness | built |
-| 7 | Mon Nov 16 | 2 | Scorecard runner (one command, all metrics) | todo |
+| 7 | Mon Nov 16 | 2 | Scorecard runner (one command, all metrics) | built |
 | 8 | Tue Nov 17 | 2 | Ledger precision and recall labeled set | todo |
 | 9 | Wed Nov 18 | 2 | Baseline scorecard run, inspect failures | todo |
 | 10 | Thu Nov 19 | 1 | Write and send midpoint update | todo |
