@@ -13,7 +13,8 @@ Target: 45 hours, Oct 26 to Dec 18, 2026. Only work done for the independent stu
 | 2026-11-11 | 2.0 | Testing and evaluation | Prompt-injection red-team set: 32 attacks across 9 channels and 10 benign look-alikes, labeled by which layer should stop each one |
 | 2026-11-12 | 2.0 | Testing and evaluation | Red-team harness: end-to-end scoring in the live agent's layer order (sender filter, model, hook), model prompts, over-refusal checks; naive and safe reference agents pinned in tests |
 | 2026-11-15 | 2.0 | Testing and evaluation | Scorecard runner: one command for all checks, dated report, mean and spread over repeated model runs, needs-reply scorer; validated against the Oct 7 v0 predictions |
+| 2026-11-16 | 2.0 | Testing and evaluation | Ledger eval set: 25 extraction cases (20 commitments, 8 hard negatives) and 6 auto-close cases, scorer for precision, recall, due dates, student-name leaks, and closure; added to the scorecard |
 
 Categories (from the study plan, with planned hours): project selection and problem definition (4), research and design (6), implementation (20), testing and evaluation (10), documentation and submission (5).
 
-**Total so far: 16.5 of 45**
+**Total so far: 18.5 of 45**
