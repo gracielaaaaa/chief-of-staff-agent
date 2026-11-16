@@ -14,9 +14,9 @@ Before the first write in a session, do `run-common` Start step 3 (resolve the D
    - TASK: free slot via `jobs.lib.slots.planning_start` + `find_slot` on her primary calendar (business-hours window for calls and errands; focus time counts as busy; check existing events first so nothing is double-booked).
    - REMINDER: 10 min free event, popup at 0.
    - EMAIL: draft it (drafter rules, flags for students, instructor, rates, contracts, scope).
-   - I_OWE / WAITING_ON: Ledger row (Ledger sheet 1jl_WqU2BDo4hRPgzmBLD3gyqJ065of90Y8VT2X3DfWU, tab items).
+   - I_OWE / WAITING_ON: Ledger row (the `Ledger` sheet in the `Chief of Staff` folder, resolved by name in `run-common` Start step 3, tab `items`).
    - LOOK_INTO_LATER: append under the lane heading in the `Look Into Later` doc.
-3. Dedupe: key `kind|chat-<YYYYMMDD>|<item text>` in `_State` `processed` (sheet 1Pm40j1FY9F9Q24pn5--So5fy2q3SZpoE4NCDo-8O2mI). Record each created object there and one row per action in the Run Log (sheet 1ldU4EXkqgBVCfGSLrq3eHh4ErnJvUAK88uLuSEzTzXM, tab runs, job `quick-capture`).
+3. Dedupe: key `kind|chat-<YYYYMMDD>|<item text>` in the `_State` sheet, tab `processed`. Record each created object there and one row per action in the `Run Log` sheet (tab `runs`, job `quick-capture`). Resolve both sheets by name in the `Chief of Staff` folder, as in `run-common` Start step 3; never hardcode their IDs.
 4. Reply with a compact table: item, what was done, when, link. No popup (she is here).
 5. Project work that needs real effort (a proposal, an invoice, an application) belongs in its own workstream session: book the block, add the ledger row, and suggest opening that workstream.
 
