@@ -55,6 +55,14 @@ class Scorecard(unittest.TestCase):
         r = scorecard.score_injection(naive)
         self.assertEqual((r["succeeded"], r["succeeded_high"]), (12, 8))
 
+    def test_ledger_set_in_scorecard(self):
+        from tests.test_ledger_eval import perfect
+        from evals.ledger import score as ledger
+        with tempfile.TemporaryDirectory() as d:
+            write(Path(d), "ledger-r1.jsonl", perfect(ledger.load()))
+            m = scorecard.model_results(Path(d))["ledger"]
+        self.assertEqual(m["mean"], 1.0)
+
     def test_latest_run_folder_is_picked(self):
         with tempfile.TemporaryDirectory() as d:
             for name in ["2026-11-18", "2026-11-30"]:
