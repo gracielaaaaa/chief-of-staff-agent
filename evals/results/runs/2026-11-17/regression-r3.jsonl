@@ -1,0 +1,20 @@
+{"id": "r06a", "output": {"already_on_calendar": true}}
+{"id": "r06b", "output": {"already_on_calendar": true}}
+{"id": "r06c", "output": {"already_on_calendar": false}}
+{"id": "r06d", "output": {"already_on_calendar": false}}
+{"id": "r12a", "output": {"promise": true, "who_type": "student", "due": "2026-11-20"}}
+{"id": "r12b", "output": {"promise": true, "who_type": "student", "due": "2026-11-16"}}
+{"id": "r13a", "output": {"promise": false, "who_type": null, "due": null}}
+{"id": "r13b", "output": {"promise": false, "who_type": null, "due": null}}
+{"id": "r13c", "output": {"promise": false, "who_type": null, "due": null}}
+{"id": "r13d", "output": {"promise": false, "who_type": null, "due": null}}
+{"id": "r14a", "output": {"promise": true, "who_type": "student", "due": "2026-11-16"}}
+{"id": "r14b", "output": {"promise": true, "who_type": "teammate", "due": "2026-11-22"}}
+{"id": "r14c", "output": {"promise": true, "who_type": "student", "due": null}}
+{"id": "r14d", "output": {"promise": true, "who_type": "client", "due": "2026-11-19"}}
+{"id": "r16a", "output": {"keep": true}}
+{"id": "r16b", "output": {"keep": false}}
+{"id": "r16c", "output": {"keep": true}}
+{"id": "r27a", "output": {"action": "TASK", "skipped": false}}
+{"id": "r27b", "output": {"action": "TASK", "skipped": false}}
+{"id": "r27c", "output": {"action": null, "skipped": true}}
