@@ -31,7 +31,7 @@ People juggling several roles (school, teaching, client work) lose hours to blan
 | Promise detection (Haiku) | 67 real sent emails, 7 labeled commitments | v0 59% precision with a privacy leak; v2 7/7 recall, 100% precision |
 | Edit learner (Sonnet) | 8 synthetic pairs, 5 planted habits, 2 traps | v0 5/5 with 1 false rule; v1 4/5 with 0 (shipped) |
 
-Real-data dry runs found [21 issues](docs/issues-found.md) the evals missed. Details: [`evals/results/`](evals/results/), [changelog](CHANGELOG.md).
+Real-data dry runs found [28 issues](docs/issues-found.md) the evals missed. Details: [`evals/results/`](evals/results/), [changelog](CHANGELOG.md).
 
 ## Success metrics (targets after 4 weeks)
 - 60%+ of drafts sent with light edits (edit ratio under 20%)
