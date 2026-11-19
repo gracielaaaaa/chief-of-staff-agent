@@ -108,6 +108,38 @@ class Guardrail(unittest.TestCase):
             self.assertFalse(guardrail.decide(kit + t, env, {}, {})[0], t)
         self.assertFalse(guardrail.decide(kit + "create_sequence", dict(env, DRY_RUN="1"), {}, {})[0])
 
+    def test_wordpress_drafts_only(self):
+        import tempfile
+        from pathlib import Path
+        wp, env = "mcp__wp123__", {"WP_CONNECTOR": "wp123"}
+        old = guardrail.WP_DRAFTS_FILE
+        with tempfile.TemporaryDirectory() as d:
+            guardrail.WP_DRAFTS_FILE = Path(d) / "wp_drafts.json"
+            try:
+                ok = lambda t, ti, e=env: guardrail.decide(wp + t, e, {}, ti)[0]
+                self.assertTrue(ok("wpcom-mcp-pages-get", {"slug": "work"}))
+                self.assertTrue(ok("wpcom-mcp-pages-create", {"title": "x"}))  # WordPress default is draft
+                self.assertTrue(ok("wpcom-mcp-pages-create", {"title": "x", "status": "draft"}))
+                for st in ["publish", "future", "private"]:
+                    self.assertFalse(ok("wpcom-mcp-pages-create", {"title": "x", "status": st}), st)
+                self.assertFalse(ok("wpcom-mcp-posts-create", {"title": "x", "date": "2026-12-01T09:00:00"}))
+                self.assertFalse(ok("wpcom-mcp-pages-get", {}, {}))         # no connector id set
+                self.assertFalse(guardrail.decide(GMAIL + "wpcom-mcp-pages-create", env, {}, {})[0])
+                # updates: only drafts this agent created
+                self.assertFalse(ok("wpcom-mcp-pages-update", {"id": 42, "content": "x"}))
+                guardrail.record_wp_draft({"tool_name": wp + "wpcom-mcp-pages-create",
+                                           "tool_response": [{"type": "text", "text": '{"id": 42, "status": "draft"}'}]})
+                self.assertTrue(ok("wpcom-mcp-pages-update", {"id": 42, "content": "x"}))
+                self.assertFalse(ok("wpcom-mcp-pages-update", {"id": 42, "status": "publish"}))
+                self.assertFalse(ok("wpcom-mcp-pages-update", {"id": 7, "content": "x"}))
+                for t in ["wpcom-mcp-pages-delete", "wpcom-page-sections-replace", "wpcom-page-sections-insert",
+                          "wpcom-media-upload", "wpcom-menus-update", "wpcom-site-settings-update",
+                          "wpcom-switch-theme", "wpcom-plugin-install"]:
+                    self.assertFalse(ok(t, {"id": 42}), t)
+                self.assertFalse(ok("wpcom-mcp-pages-create", {"title": "x"}, dict(env, DRY_RUN="1")))
+            finally:
+                guardrail.WP_DRAFTS_FILE = old
+
     def test_harness_tools_pass(self):
         self.assertTrue(self.check("mcp__ccd_session__mark_chapter"))
 

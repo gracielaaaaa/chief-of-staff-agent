@@ -73,6 +73,80 @@ def kit_block(tool_name: str, suffix: str, env: dict, tool_input) -> str:
     return ""
 
 
+# WordPress (the consulting client's website), allowed on the WordPress connector only.
+# Reads are open. Writes create draft or pending pages and posts, and update only drafts
+# this agent created (their ids are recorded after each create in state/wp_drafts.json).
+# Publishing, scheduling, editing live pages, section edits, media, menus, settings, and
+# deletes are not on any list. Graciela publishes in WordPress.
+# The connector's server id lives in state/wp_connector.txt (gitignored) or WP_CONNECTOR.
+WP_READ = {
+    "wpcom-user-sites", "docs", "wpcom-site-settings", "wpcom-rendered-page-get",
+    "wpcom-mcp-pages-list", "wpcom-mcp-pages-get", "wpcom-mcp-posts-list", "wpcom-mcp-posts-get",
+    "wpcom-mcp-media-list", "wpcom-mcp-media-get", "wpcom-mcp-content-search", "wpcom-mcp-site-posts-search",
+    "wpcom-page-sections-list", "wpcom-post-sections-list", "wpcom-templates-list", "wpcom-templates-get",
+    "wpcom-theme-active", "wpcom-global-styles-get",
+}
+WP_CREATE = {"wpcom-mcp-pages-create", "wpcom-mcp-posts-create"}
+WP_UPDATE = {"wpcom-mcp-pages-update", "wpcom-mcp-posts-update"}
+WP_DRAFT_STATUS = {"draft", "pending"}
+WP_FILE = ROOT / "state" / "wp_connector.txt"
+WP_DRAFTS_FILE = ROOT / "state" / "wp_drafts.json"
+
+
+def wp_connector(env: dict) -> str:
+    if env.get("WP_CONNECTOR"):
+        return env["WP_CONNECTOR"].strip()
+    try:
+        return WP_FILE.read_text().strip()
+    except OSError:
+        return ""
+
+
+def wp_drafts() -> set:
+    try:
+        return {int(i) for i in json.loads(WP_DRAFTS_FILE.read_text())}
+    except (OSError, ValueError, TypeError):
+        return set()
+
+
+def wp_block(tool_name: str, suffix: str, env: dict, tool_input) -> str:
+    """Reason to block a WordPress action, or "" if it may run."""
+    wp = wp_connector(env)
+    server = tool_name.split("__")[1] if tool_name.count("__") >= 2 else ""
+    if not wp or server != wp:
+        return f"BLOCKED by guardrail: '{suffix}' is only allowed on the WordPress connector."
+    ti = tool_input or {}
+    if suffix in WP_CREATE | WP_UPDATE:
+        status = ti.get("status")
+        if status is not None and status not in WP_DRAFT_STATUS:
+            return ("BLOCKED by guardrail: WordPress pages and posts stay drafts (status draft or pending). "
+                    "Graciela publishes in WordPress.")
+        if ti.get("date"):
+            return "BLOCKED by guardrail: setting a date can schedule a post. Leave scheduling to Graciela."
+    if suffix in WP_UPDATE:
+        try:
+            pid = int(ti.get("id"))
+        except (TypeError, ValueError):
+            pid = None
+        if pid not in wp_drafts():
+            return ("BLOCKED by guardrail: this agent only edits WordPress drafts it created. "
+                    "Live pages change only when Graciela copies the draft in.")
+    return ""
+
+
+def record_wp_draft(event: dict) -> None:
+    """PostToolUse: remember the id of a draft this agent just created."""
+    suffix = tool_suffix(event.get("tool_name", ""))
+    if suffix not in WP_CREATE:
+        return
+    m = re.search(r'\\?"id\\?"\s*:\s*(\d+)', json.dumps(event.get("tool_response")))
+    if not m:
+        return
+    ids = wp_drafts() | {int(m.group(1))}
+    WP_DRAFTS_FILE.parent.mkdir(exist_ok=True)
+    WP_DRAFTS_FILE.write_text(json.dumps(sorted(ids)))
+
+
 # Harness and session tools, not data connectors. Not used by scheduled jobs.
 HARNESS_SERVERS = re.compile(
     r"^mcp__(ccd_[a-z_]+|mcp-registry|visualize|Claude_Browser|Claude_Code_iOS_Simulator|terminal|scheduled-tasks)__"
@@ -141,7 +215,13 @@ def decide(tool_name: str, env: dict, config: dict, tool_input=None) -> tuple[bo
         why = kit_block(tool_name, suffix, env, tool_input)
         if why:
             return False, why
-    if not READ.match(suffix) and suffix not in WRITE and suffix not in KIT_DRAFTS:
+    wp_write = suffix in WP_CREATE | WP_UPDATE
+    if wp_write or suffix in WP_READ:
+        why = wp_block(tool_name, suffix, env, tool_input)
+        if why:
+            return False, why
+    if (not READ.match(suffix) and suffix not in WRITE and suffix not in KIT_DRAFTS
+            and suffix not in WP_READ and not wp_write):
         return False, (
             f"BLOCKED by guardrail: '{suffix}' is not on the allow list. This agent only "
             "reads, creates drafts, events, and files in its own folder. Record the intended "
@@ -152,7 +232,7 @@ def decide(tool_name: str, env: dict, config: dict, tool_input=None) -> tuple[bo
             "BLOCKED by guardrail: deleting sheets, rows, columns, or tabs is never allowed. "
             "Mark ledger items status=dropped instead."
         )
-    if suffix in WRITE or suffix in KIT_DRAFTS:
+    if suffix in WRITE or suffix in KIT_DRAFTS or wp_write:
         secrets = find_secrets(json.dumps(tool_input or {}, ensure_ascii=False))
         if secrets:
             return False, (
@@ -183,6 +263,12 @@ def main() -> int:
     except ValueError:
         print("guardrail: unreadable hook input, blocking to be safe", file=sys.stderr)
         return 2
+    if len(sys.argv) > 1 and sys.argv[1] == "post":
+        try:
+            record_wp_draft(event)
+        except OSError:
+            pass
+        return 0
     ok, reason = decide(event.get("tool_name", ""), dict(os.environ), load_config(), event.get("tool_input"))
     if ok:
         return 0
