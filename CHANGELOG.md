@@ -92,3 +92,7 @@ From a real proposal that took a dozen rounds of `[CHECK]` fixes. Prospect and c
 
 ## v0.4.2 (2026-10-10): value and ROI analyst
 - New `value-analyst` subagent (Sonnet): frames every engagement by the client's return (baseline, target, measure, payback in their units) in pass 1, and reads the proposal as the client in pass 2 as part of the send-ready gate. Proposal architect now leads with value. ADR 0008 amended.
+
+## v0.4.3 (2026-11-16): no hardcoded Sheet IDs
+- `quick-capture` named the Ledger, `_State`, and Run Log sheets by ID. It now resolves them by name in the `Chief of Staff` folder, like `run-common` Start step 3. Found while building the escalation ladder.
+- The scrub check missed these because it only caught IDs inside a `docs.google.com` link. New `Google file id` pattern catches bare Drive, Sheets, and Docs IDs (starts with 1, 25 to 50 characters, mixed case) without flagging dedupe hashes. 62 unit tests.

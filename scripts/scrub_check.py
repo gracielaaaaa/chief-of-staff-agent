@@ -19,6 +19,8 @@ PATTERNS = {
     "real email address": re.compile(r"[\w.+-]+@(?!([\w-]+\.)*example\.(com|org|edu)\b)[\w-]+\.[\w.]+", re.I),
     "Google Drive/Docs link": re.compile(r"(docs|drive)\.google\.com/\S*/d/[\w-]{20,}"),
     "calendar id": re.compile(r"[\w]{20,}@(group|import)\.calendar\.google\.com"),
+    # Bare Drive/Sheets/Docs file id (33 to 44 chars, starts with 1, mixed case). Dedupe hashes are lowercase hex.
+    "Google file id": re.compile(r"(?<![\w-])1(?=[\w-]*[A-Z])(?=[\w-]*[a-z])[\w-]{24,49}(?![\w-])"),
 }
 
 

@@ -444,3 +444,23 @@ class Dedupe(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+scrub_spec = importlib.util.spec_from_file_location("scrub_check", ROOT / "scripts/scrub_check.py")
+scrub_check = importlib.util.module_from_spec(scrub_spec)
+scrub_spec.loader.exec_module(scrub_check)
+
+
+class ScrubCheck(unittest.TestCase):
+    FILE_ID = scrub_check.PATTERNS["Google file id"]
+
+    def test_catches_bare_file_ids(self):
+        fake = "1" + "aB3_x-Yz9Q" * 4 + "kLm"  # 44 chars, built at runtime so the scrub check passes this file
+        self.assertTrue(self.FILE_ID.search(f"Ledger row (Ledger sheet {fake}, tab items)"))
+        self.assertTrue(self.FILE_ID.search("folder " + fake[:33]))
+
+    def test_ignores_hashes_and_identifiers(self):
+        key = dedupe.key("task", "chat-20261116", "call the dentist")
+        for line in [key, "a" * 64, "1" + "0123456789abcdef" * 3, "test_ignores_hashes_and_identifiers_long_name",
+                     "run_id quick-capture-2026-11-16T10:00:00Z"]:
+            self.assertFalse(self.FILE_ID.search(line), line)
