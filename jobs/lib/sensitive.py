@@ -75,7 +75,8 @@ def _luhn(digits: str) -> bool:
 # 15-16 digits (Amex, Visa/MC), not glued to URLs or ids (Gmail thread ids are 19 digits after "thread-f:")
 _CARD = re.compile(r"(?<![\w:/=#.-])(?:\d[ -]?){14,15}\d(?![\w-])")
 _SSN = re.compile(r"\b\d{3}-\d{2}-\d{4}\b")
-_BANK = re.compile(r"\b(routing|account|acct|iban|swift)\s*(number|no\.?|#)?\s*[:#]?\s*(?=[A-Z0-9]*\d)[A-Z0-9]{6,}", re.I)
+# "Routing number: 1210...", and also the way people write it in a note: "my routing number is 1210..."
+_BANK = re.compile(r"\b(routing|account|acct|iban|swift)\s*(number|no\.?|#)?\s*(?:[:#]|\b(?:is|was|ends? in|ending in)\b)?\s*(?=[A-Z0-9]*\d)[A-Z0-9]{6,}", re.I)
 _OTP = re.compile(r"\b(code|passcode|otp|pin)\b[^0-9\n]{0,20}\b\d{6,8}\b", re.I)
 _PASSWORD = re.compile(r"\bpass(word|wd|phrase)?\s*[:=]\s*\S+", re.I)
 
