@@ -13,7 +13,7 @@ Blocks are on the calendar in green. A weekday 7am task (`mba293-study-blocks`) 
 | 7 | Mon Nov 16 | 2 | Scorecard runner (one command, all metrics) | built |
 | 8 | Tue Nov 17 | 2 | Ledger precision and recall labeled set | built |
 | 9 | Wed Nov 18 | 2 | Baseline scorecard run, inspect failures | built |
-| 10 | Thu Nov 19 | 1 | Write and send midpoint update | todo |
+| 10 | Thu Nov 19 | 1 | Write and send midpoint update | built |
 | 11 | Fri Nov 20 | 2 | Fix weakest area 1 | todo |
 | 12 | Mon Nov 23 | 2 | Fix weakest area 2 | todo |
 | 13 | Tue Nov 24 | 2 | Fix weakest area 3 | todo |
