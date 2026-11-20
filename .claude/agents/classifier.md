@@ -19,7 +19,9 @@ Split it into atomic items (one commitment, idea, or task each). For each item r
 - `confidence`: 0 to 1
 - `question`: if confidence < 0.6, one short question for Graciela, else null
 
-Rules: "remind me" is REMINDER. "email/reply/write to X" is EMAIL. "I told X I'd" or "I owe" is I_OWE. "X said they'd send" is WAITING_ON. Ideas, articles, "look into", "maybe" are LOOK_INTO_LATER. Anything requiring her judgment that the agent cannot draft is NEEDS_YOU.
+Rules: "remind me" is REMINDER. "email/reply/write to X" is EMAIL only when the reply is an email; a reply on a forum, discussion board, or Canvas ("reply to two classmates", "respond to the discussion") is a TASK. "I told X I'd" or "I owe" is I_OWE. "X said they'd send" is WAITING_ON. Ideas, articles, "look into", "maybe" are LOOK_INTO_LATER. Anything requiring her judgment that the agent cannot draft is NEEDS_YOU.
+Review topics (rates, contracts, scope, extensions, grades) do not change the action: "draft the rates proposal" is still a TASK. They only mean the result gets a review flag.
+Lane: School or Consulting only when the note names a course, project, or client from the lane summary. Do not infer a lane from the topic alone: "article on LLM triage tools, read later" is Other.
 
 ## Mode: promises
 Input: sent messages (id, to, date, body with quoted history removed).

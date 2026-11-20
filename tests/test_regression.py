@@ -162,6 +162,13 @@ class SkillTextBackstops(unittest.TestCase):
         self.assertTrue(re.search(r"same-day logistics", text, re.I), "issue 13 exclusion missing")
         self.assertTrue(re.search(r"I need to", text), "issue 14 obligation rule missing")
 
+    def test_baseline_capture_rules(self):
+        # Block 11 fixes for the 2026-11-17 baseline capture failures (n16, n14, n11).
+        text = (ROOT / ".claude/agents/classifier.md").read_text()
+        self.assertIn("a reply on a forum, discussion board, or Canvas", text)
+        self.assertIn("Review topics (rates, contracts, scope, extensions, grades) do not change the action", text)
+        self.assertIn("Do not infer a lane from the topic alone", text)
+
     def test_issue_15_first_run_lookback_rule(self):
         self.assertIn("First run (no cursor): look back 7 days only", read(".claude/skills/ledger/SKILL.md"))
 
