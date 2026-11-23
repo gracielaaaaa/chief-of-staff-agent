@@ -166,8 +166,18 @@ class SkillTextBackstops(unittest.TestCase):
         # Block 11 fixes for the 2026-11-17 baseline capture failures (n16, n14, n11).
         text = (ROOT / ".claude/agents/classifier.md").read_text()
         self.assertIn("a reply on a forum, discussion board, or Canvas", text)
+        self.assertIn('"follow up with X" (a person) are EMAIL', text)
+        self.assertIn("a role the lane summary ties to one", text)
         self.assertIn("Review topics (rates, contracts, scope, extensions, grades) do not change the action", text)
         self.assertIn("Do not infer a lane from the topic alone", text)
+
+    def test_baseline_ledger_meeting_rules(self):
+        # Block 12 fixes for the 2026-11-17 baseline ledger failures (l18, l23, l24, l09).
+        text = (ROOT / ".claude/agents/classifier.md").read_text()
+        self.assertIn("is owed to the team, not to her: leave it out", text)
+        self.assertIn("Vague intentions", text)
+        self.assertIn("a direct request she makes", text)
+        self.assertIn("promises-mode meeting rules", read(".claude/skills/ledger/SKILL.md"))
 
     def test_issue_15_first_run_lookback_rule(self):
         self.assertIn("First run (no cursor): look back 7 days only", read(".claude/skills/ledger/SKILL.md"))

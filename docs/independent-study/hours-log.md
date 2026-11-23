@@ -16,7 +16,8 @@ Target: 45 hours, Oct 26 to Dec 18, 2026. Only work done for the independent stu
 | 2026-11-16 | 2.0 | Testing and evaluation | Ledger eval set: 25 extraction cases (20 commitments, 8 hard negatives) and 6 auto-close cases, scorer for precision, recall, due dates, student-name leaks, and closure; added to the scorecard |
 | 2026-11-17 | 2.0 | Testing and evaluation | Baseline scorecard run: label-free input bundles, 3 repeats of each model set, failure inspection, three weakest areas chosen for the fix blocks |
 | 2026-11-18 | 1.0 | Documentation and submission | Midpoint update to the faculty sponsor: baseline results, early findings, next steps (drafted for review) |
+| 2026-11-20 | 2.0 | Implementation | Fix 1: classifier capture rules (forum replies, review topics, lane), regression pins, 3-run spot check, fix log |
 
 Categories (from the study plan, with planned hours): project selection and problem definition (4), research and design (6), implementation (20), testing and evaluation (10), documentation and submission (5).
 
-**Total so far: 21.5 of 45**
+**Total so far: 23.5 of 45**

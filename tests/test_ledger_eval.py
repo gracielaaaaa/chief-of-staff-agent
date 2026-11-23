@@ -46,6 +46,19 @@ class LedgerEval(unittest.TestCase):
                 p["items"][0]["who"] = "Jamie Student"
         self.assertEqual(ledger.score(preds, self.cases)["student_name_leaks"], 1)
 
+    def test_key_synonyms(self):
+        # Scorer change, block 12: "dsp|disability services" accepts either phrase.
+        preds = perfect(self.cases)
+        for p in preds:
+            if p["id"] == "l05":
+                p["items"][0]["what"] = "share the midterm with disability services"
+        r = ledger.score(preds, self.cases)
+        self.assertEqual(r["false_neg"], 0)
+        for p in preds:
+            if p["id"] == "l05":
+                p["items"][0]["what"] = "share the midterm"
+        self.assertEqual(ledger.score(preds, self.cases)["false_neg"], 1)
+
     def test_quoted_promise_is_a_false_positive(self):
         preds = perfect(self.cases)
         for p in preds:

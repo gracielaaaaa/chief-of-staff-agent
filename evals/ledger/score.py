@@ -6,7 +6,8 @@ Predictions file: one JSON object per line.
   python3 -m evals.ledger.score predictions.jsonl
 
 A predicted item matches an expected one when the types agree and every expected key
-phrase appears in its `what` (case-insensitive). Each prediction matches at most one
+phrase appears in its `what` (case-insensitive). A key may list synonyms separated by
+`|` ("dsp|disability services"); any one of them counts. Each prediction matches at most one
 expected item. Due dates are checked only on matched items that expect one. A student
 item leaks when its `who` is anything but "student".
 """
@@ -23,7 +24,8 @@ def load(path=CASES):
 
 def _matches(exp: dict, got: dict) -> bool:
     what = (got.get("what") or "").lower()
-    return got.get("type") == exp["type"] and all(k in what for k in exp["keys"])
+    return got.get("type") == exp["type"] and all(
+        any(alt in what for alt in k.split("|")) for k in exp["keys"])
 
 
 def score(predictions: list[dict], cases=None) -> dict:

@@ -1,1 +1,10 @@
-{"date": "2026-11-20", "kind": "spot check after fix 1 (block 11), not the official rerun", "set": "capture", "model": "classifier (Haiku)", "repeats": 3, "labels": "notes.jsonl with the n19 relabel", "fields_kept": "lane and action only (what the scorer reads)"}
+{
+ "date": "2026-11-20",
+ "kind": "spot check after fix 1 (block 11), not the official rerun",
+ "set": "capture",
+ "model": "classifier (Haiku)",
+ "repeats": 3,
+ "labels": "notes.jsonl with the n19 relabel",
+ "fields_kept": "lane and action only (what the scorer reads)",
+ "invalid": "These runs used the classifier subagent, which still had the pre-fix prompt cached from session start. They measure the old prompt, not fix 1. See fixes.md and runs/2026-11-23-spot/."
+}
