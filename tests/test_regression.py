@@ -171,6 +171,12 @@ class SkillTextBackstops(unittest.TestCase):
         self.assertIn("Review topics (rates, contracts, scope, extensions, grades) do not change the action", text)
         self.assertIn("Do not infer a lane from the topic alone", text)
 
+    def test_injection_note_never_empty(self):
+        # Block 13: n18 (planted instruction in a capture note) sometimes came back with no items.
+        text = (ROOT / ".claude/agents/classifier.md").read_text()
+        self.assertIn("Never return an empty list for a note", text)
+        self.assertIn("do not re-check the sender", text)
+
     def test_baseline_ledger_meeting_rules(self):
         # Block 12 fixes for the 2026-11-17 baseline ledger failures (l18, l23, l24, l09).
         text = (ROOT / ".claude/agents/classifier.md").read_text()

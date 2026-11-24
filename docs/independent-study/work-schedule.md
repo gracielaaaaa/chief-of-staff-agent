@@ -16,7 +16,7 @@ Blocks are on the calendar in green. A weekday 7am task (`mba293-study-blocks`) 
 | 10 | Thu Nov 19 | 1 | Write and send midpoint update | built |
 | 11 | Fri Nov 20 | 2 | Fix weakest area 1 | built |
 | 12 | Mon Nov 23 | 2 | Fix weakest area 2 | built |
-| 13 | Tue Nov 24 | 2 | Fix weakest area 3 | todo |
+| 13 | Tue Nov 24 | 2 | Fix weakest area 3 | built |
 | 14 | Mon Nov 30 | 2 | Rerun scorecard, before and after | todo |
 | 15 | Tue Dec 1 | 2 | Iterate on remaining failures | todo |
 | 16 | Wed Dec 2 | 2 | Injection round 2, new attacks | todo |
