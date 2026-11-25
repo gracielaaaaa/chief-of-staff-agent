@@ -337,6 +337,14 @@ class Sensitive(unittest.TestCase):
         self.assertTrue(sensitive.sensitive_sender("faoemail" + AT + "example.edu"))
         self.assertFalse(sensitive.sensitive_sender("pat" + AT + "example.edu"))
         self.assertTrue(sensitive.sensitive_subject("Your verification code"))
+        # A request for help with a code that does not work gets a draft (2026-11-25, b09).
+        self.assertFalse(sensitive.sensitive_subject("My verification code for the exam portal is not working"))
+        self.assertFalse(sensitive.sensitive_subject("Didn't receive my sign-in code"))
+        self.assertTrue(sensitive.sensitive_subject("Your one-time passcode"))
+        self.assertTrue(sensitive.sensitive_subject("New sign-in to your account"))
+        # Financial subjects stay skipped even when phrased as a problem.
+        self.assertTrue(sensitive.sensitive_subject("Problem with your student loan payment"))
+        self.assertTrue(sensitive.sensitive_subject("Help: routing number not working"))
         self.assertTrue(sensitive.sensitive_subject("Your W-2 is ready"))
         self.assertFalse(sensitive.sensitive_subject("Re: quiz 3"))
         self.assertTrue(sensitive.sensitive_subject("Your loan payment is due"))

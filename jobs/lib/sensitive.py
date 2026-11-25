@@ -28,9 +28,21 @@ FINANCIAL_SENDER_DOMAINS = (
 )
 FINANCIAL_SENDER_LOCALPARTS = ("faoemail", "financialaid", "payroll", "statements")
 
-_SUBJECT = re.compile(
+# Credential notices sent to her (codes, resets, sign-in alerts).
+_CODE_SUBJECT = re.compile(
     r"verification code|security code|one[- ]time (pass)?code|passcode|2fa|two[- ]factor|"
-    r"password reset|reset your password|sign[- ]in attempt|new sign[- ]in|login attempt|"
+    r"password reset|reset your password|sign[- ]in attempt|new sign[- ]in|login attempt",
+    re.I,
+)
+# Owner's rule (2026-11-25): a person asking for help with a code that does not work
+# ("my verification code for the exam portal is not working") gets a draft. It carries no code.
+# find_secrets still blocks any code from landing in a draft.
+_HELP = re.compile(
+    r"\b(not working|is ?n[o']t working|does ?n[o']t work|won'?t (work|accept)|did ?n[o']t (get|receive|arrive)|"
+    r"never (got|received|arrived)|expired|trouble|problem|issue|help)\b",
+    re.I,
+)
+_SUBJECT = re.compile(
     r"statement is (ready|available)|direct deposit|\bW-?2\b|\b1099\b|tax (form|return|document)|"
     r"financial aid|bank account|account number|routing number|"
     r"\bloan\b|loan (payment|balance|servicer)|student loan|mortgage|"
@@ -56,7 +68,10 @@ def sensitive_sender(addr: str) -> bool:
 
 
 def sensitive_subject(subject: str) -> bool:
-    return bool(_SUBJECT.search(subject or ""))
+    subject = subject or ""
+    if _SUBJECT.search(subject):
+        return True
+    return bool(_CODE_SUBJECT.search(subject)) and not _HELP.search(subject)
 
 
 def _luhn(digits: str) -> bool:
