@@ -19,7 +19,8 @@ Target: 45 hours, Oct 26 to Dec 18, 2026. Only work done for the independent stu
 | 2026-11-20 | 2.0 | Implementation | Fix 1: classifier capture rules (forum replies, review topics, lane), regression pins, 3-run spot check, fix log |
 | 2026-11-23 | 2.0 | Implementation | Fix 2: ledger meeting-note rules and scorer key synonyms; found the cached-subagent-prompt harness flaw, re-tested fix 1 with old and new prompts through one harness, corrected fix 1 |
 | 2026-11-23 | 2.0 | Implementation | Fix 3: production-framed injection run (40 fresh calls, no eval wording), right-action scoring for benign cases, n18 empty-result fix and spot check |
+| 2026-11-25 | 2.0 | Testing and evaluation | Block 14 before and after rerun (capture, needs-reply, regression, ledger; old and new prompts through one harness), scorecard 2026-11-25; found the subagent loads master's prompt and corrected the harness finding |
 
 Categories (from the study plan, with planned hours): project selection and problem definition (4), research and design (6), implementation (20), testing and evaluation (10), documentation and submission (5).
 
-**Total so far: 27.5 of 45**
+**Total so far: 29.5 of 45**
