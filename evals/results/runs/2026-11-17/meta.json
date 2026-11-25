@@ -1,0 +1,3 @@
+{"models": {"classifier": "Haiku (capture, needs_reply, regression, ledger)", "agent": "Sonnet (injection)"},
+ "prompt_version": "baseline 2026-11-17: agent definitions at the run commit, bundles from evals/inputs.py",
+ "repeats": 3, "date_run": "2026-11-17", "note": "Block 9 baseline. Each repeat is a fresh subagent with no shared context."}

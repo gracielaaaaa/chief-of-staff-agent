@@ -1,0 +1,10 @@
+{"id": "r01", "needs_reply": false, "recipient_type": "instructor", "reason": "Instructor thanks and shares an update; no question or request for Maya."}
+{"id": "r02", "needs_reply": true, "recipient_type": "student", "reason": "Student asks whether accommodations apply to quizzes and about a read-aloud tool."}
+{"id": "r03", "needs_reply": false, "recipient_type": "student", "reason": "Student's thank-you closes the roster loop; nothing is pending for Maya."}
+{"id": "r04", "needs_reply": true, "recipient_type": "instructor", "reason": "Instructor asks Maya to confirm she is sending lecture absences to GSIs each week."}
+{"id": "r05", "needs_reply": false, "recipient_type": "peer", "reason": "Co-GSI confirmation addressed to instructor; no request for Maya."}
+{"id": "r06", "needs_reply": false, "recipient_type": "instructor", "reason": "Instructor moves the discussion offline to after class, so no reply is needed in the thread."}
+{"id": "r07", "needs_reply": false, "recipient_type": "other", "reason": "Automated waitlist status notice from the enrollment office; no answer expected."}
+{"id": "r08", "needs_reply": true, "recipient_type": "client", "reason": "Client asks Maya to send the updated landscape doc before Thursday's call."}
+{"id": "r09", "needs_reply": true, "recipient_type": "teammate", "reason": "Teammate asks who will take the methods section and needs answers by tonight."}
+{"id": "r10", "needs_reply": false, "recipient_type": "other", "reason": "Mass newsletter announcing career center events."}

@@ -12,7 +12,7 @@ Runs after the dispatcher in the `capture` routine. Uses `run-common` (already s
 - Gmail search does not reliably honor `-label:` with ids, so apply every filter below in code, on each thread's messages.
 - Drop a thread if any of these is true:
   - the sender or subject is sensitive (`jobs.lib.sensitive.sensitive_sender` / `sensitive_subject`): banking, investments, loans, tax, payroll, login codes. Decide from metadata only; never open the body.
-  - any message carries the `Agent/Inbox`, `Agent/Done`, or `Agent/Skipped` label (capture notes are the dispatcher's job)
+  - any message carries the `Agent/Inbox`, `Agent/Done`, or `Agent/Skipped` label (capture notes are the dispatcher's job): `jobs.lib.filters.has_any_label(thread, [those ids])`
   - the newest message is from one of her addresses (`My addresses` in Lane Context): she already answered
   - the sender matches `skip_sender_patterns`, or `config.exclusions`
   - she is not on To or CC (mailing lists, BCC blasts)

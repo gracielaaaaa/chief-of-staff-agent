@@ -1,0 +1,5 @@
+{"models": {"classifier": "Haiku (capture, needs_reply, regression, ledger), file-read harness", "agent": "Sonnet (injection, block 13 production-framed run copied as injection-r1)"},
+ "prompt_version": "branch claude/mba293-study at bdd628b: classifier.md with fixes 1 to 3, read as a rules file",
+ "arms": {"after": "classifier subagent told to follow rules-new.md (worktree .claude/agents/classifier.md) in place of its own prompt"},
+ "repeats": 3, "date_run": "2026-11-25",
+ "note": "Block 14 official rerun. The real classifier subagent loads master's classifier.md from the main checkout, so it cannot run the branch prompt. Run-to-agent mapping was rebuilt from each transcript's own prompt."}

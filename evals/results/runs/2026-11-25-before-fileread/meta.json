@@ -1,0 +1,4 @@
+{"models": {"classifier": "Haiku, file-read harness"},
+ "prompt_version": "master .claude/agents/classifier.md (Oct 7, same as the Nov 17 baseline), read as a rules file",
+ "arms": {"before": "classifier subagent told to follow rules-old.md (git show master:.claude/agents/classifier.md) in place of its own prompt"},
+ "repeats": 3, "date_run": "2026-11-25", "note": "Block 14 control arm, same harness as the after arm. Capture and ledger only."}

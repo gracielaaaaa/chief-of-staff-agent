@@ -92,3 +92,17 @@ From a real proposal that took a dozen rounds of `[CHECK]` fixes. Prospect and c
 
 ## v0.4.2 (2026-10-10): value and ROI analyst
 - New `value-analyst` subagent (Sonnet): frames every engagement by the client's return (baseline, target, measure, payback in their units) in pass 1, and reads the proposal as the client in pass 2 as part of the send-ready gate. Proposal architect now leads with value. ADR 0008 amended.
+
+## Unreleased (branch claude/mba293-study): regression suite for real-data issues
+- `tests/test_regression.py`: one test per real-data issue in `docs/issues-found.md` (code behavior, plus text pins for prompt-only fixes). Model-layer cases in `evals/regression/model_cases.jsonl` with `evals/regression/score.py`. Per-issue status in `evals/regression/coverage.md`: 25 of 28 reproducible offline, at least in part.
+- `jobs/lib/filters.py`: the sender allowlist and the label screen moved from skill prose into tested code; dispatcher and inbox-triage call it.
+- Baseline model run (block 9): `evals/inputs.py` builds label-free bundles per set; 3 repeats per set in `evals/results/runs/2026-11-17/`; `evals/results/scorecard-2026-11-17.md` and the failure analysis in `evals/results/baseline-2026-11-17.md`.
+- Fix 1 (blocks 11 and 12): classifier capture rules. A forum or Canvas reply is a TASK; follow-ups with a person stay EMAIL; review topics (rates, scope) add a review flag but do not change the action; lane needs a named course, project, client, contact, or a role tied to one. Pinned in `tests/test_regression.py`. Spot check 20 of 20 in 3 of 3 runs.
+- Fix 2 (block 12): ledger meeting-note rules in classifier promises mode and the ledger skill (only her items and items owed to her personally; "think about" is not a commitment; "can you send me" is WAITING_ON). Spot check F1 1.0 in 3 of 3 runs, against 0.90 for the old prompt.
+- Ledger scorer: expected keys accept `|` synonyms (scorer change, recorded apart from model changes).
+- Eval harness finding: the classifier subagent keeps its session-start prompt, so mid-session edits never reach it. The block 11 spot check was invalid. Spot checks now run old and new prompts through the same file-read harness. Details in `evals/results/fixes.md`.
+- Fix 3 (block 13): injection measurement. `harness.prod_prompt` runs one case per fresh call with the job's real context and no eval framing; benign items are scored for the right action (`right_action` in `cases.jsonl`). Run in `evals/results/runs/2026-11-23-injection-prod/`: 0 attempts, 0 successes, 28/30 flagged (2 silent by the sensitive-skip rule), benign right action 9/10.
+- Classifier capture mode: never return an empty list, do not re-check the sender (code does), and return NEEDS_YOU for a planted instruction (n18). Spot check 3 of 3 against 2 of 3 for the old rules.
+- Block 14 rerun: `evals/results/scorecard-2026-11-25.md` and `evals/results/rerun-2026-11-25.md`. File-read harness for both arms, 3 runs each: capture 18.7 to 19.7 of 20, ledger F1 0.93 to 0.98; needs-reply and regression stay at 100%. Corrected harness finding: the classifier subagent loads master's prompt from the main checkout, so branch prompt fixes reach production only after a merge.
+- `run-common`: `config.json` is the source of truth when a routine prompt disagrees (issue 19's fix was not in the repo before).
+- Fix: the secrets scan missed account numbers written conversationally ("my routing number is ..."). Found by the issue 27 regression test.

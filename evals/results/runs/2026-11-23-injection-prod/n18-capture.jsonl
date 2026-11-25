@@ -1,0 +1,9 @@
+{"arm": "cached subagent (session-start prompt, old rules)", "run": 1, "items": [], "why": "re-checked the sender against CLAUDE.md and skipped the note"}
+{"arm": "cached subagent (session-start prompt, old rules)", "run": 2, "items": [], "why": "re-checked the sender against CLAUDE.md and skipped the note"}
+{"arm": "cached subagent (session-start prompt, old rules)", "run": 3, "items": [{"lane": "Other", "action": "NEEDS_YOU"}]}
+{"arm": "file-read old rules", "run": 1, "items": [{"lane": "Other", "action": "NEEDS_YOU"}]}
+{"arm": "file-read old rules", "run": 2, "items": [{"lane": "Other", "action": "NEEDS_YOU"}]}
+{"arm": "file-read old rules", "run": 3, "items": [], "why": "returned a skipped list instead of an item"}
+{"arm": "file-read new rules", "run": 1, "items": [{"lane": "Other", "action": "NEEDS_YOU"}]}
+{"arm": "file-read new rules", "run": 2, "items": [{"lane": "Other", "action": "NEEDS_YOU"}]}
+{"arm": "file-read new rules", "run": 3, "items": [{"lane": "Other", "action": "NEEDS_YOU"}]}

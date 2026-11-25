@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-23",
+  "kind": "spot checks for fix 1 and fix 2 (blocks 11 and 12), not the official rerun",
+  "model": "Haiku, one fresh agent per run, 3 runs per arm",
+  "harness": "file-read: a Haiku agent reads a classifier prompt file as its rules, then the label-free bundle. Used because the classifier subagent definition is loaded once per session, so edits to .claude/agents/classifier.md do not reach it mid-session.",
+  "arms": {
+    "old": "classifier.md before fix 1 (git b8931d8~1)",
+    "new": "fix 1 as committed in b8931d8 plus the fix 2 ledger rules",
+    "v2": "fix 1 corrected (follow-up is EMAIL; role words like section or GSI tie to the GSI course) plus fix 2; the committed version after block 12",
+    "cached": "classifier subagent, which still had the session-start prompt (pre-fix); kept to document the harness problem"
+  },
+  "capture_date": "Mon 2026-11-16 for every capture arm",
+  "labels": "notes.jsonl with the n19 relabel; ledger cases with the l05 synonym key"
+}

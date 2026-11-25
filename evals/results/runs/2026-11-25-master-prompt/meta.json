@@ -1,0 +1,3 @@
+{"models": {"classifier": "Haiku, real classifier subagent"},
+ "prompt_version": "master .claude/agents/classifier.md (Oct 7). Intended as the after run; the transcripts show the subagent loaded master's prompt from the main checkout, not the branch",
+ "repeats": 3, "date_run": "2026-11-25", "note": "Kept as a third before measurement on the production path."}

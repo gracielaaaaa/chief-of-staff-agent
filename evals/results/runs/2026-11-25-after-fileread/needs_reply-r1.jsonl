@@ -1,0 +1,10 @@
+{"id": "r01", "thread_id": "r01", "needs_reply": false, "recipient_type": "instructor", "lane": "School", "urgency": "high", "reason": "Instructor thanks co-GSI and announces a section visit; no question for Maya"}
+{"id": "r02", "thread_id": "r02", "needs_reply": true, "recipient_type": "student", "lane": "School", "urgency": "normal", "reason": "Student asks whether accommodations cover in-class quizzes and a read-aloud tool"}
+{"id": "r03", "thread_id": "r03", "needs_reply": false, "recipient_type": "student", "lane": "School", "urgency": "normal", "reason": "Thank-you closes the roster loop; no reply expected"}
+{"id": "r04", "thread_id": "r04", "needs_reply": true, "recipient_type": "instructor", "lane": "School", "urgency": "high", "reason": "Instructor asks Maya to confirm weekly lecture absences go to the GSIs"}
+{"id": "r05", "thread_id": "r05", "needs_reply": false, "recipient_type": "peer", "lane": "School", "urgency": "normal", "reason": "Co-GSI confirms coverage to instructor; Maya is cc only"}
+{"id": "r06", "thread_id": "r06", "needs_reply": false, "recipient_type": "instructor", "lane": "School", "urgency": "high", "reason": "Instructor says edit access may already be set and moves discussion to after class"}
+{"id": "r07", "thread_id": "r07", "needs_reply": false, "recipient_type": "other", "lane": "Other", "urgency": "normal", "reason": "Enrollment office waitlist status notice; no question asked"}
+{"id": "r08", "thread_id": "r08", "needs_reply": true, "recipient_type": "client", "lane": "Consulting", "urgency": "high", "reason": "Client asks for the updated landscape doc before Thursday's call"}
+{"id": "r09", "thread_id": "r09", "needs_reply": true, "recipient_type": "teammate", "lane": "School", "urgency": "high", "reason": "Teammate asks who will take the methods section, answers needed by tonight"}
+{"id": "r10", "thread_id": "r10", "needs_reply": false, "recipient_type": "other", "lane": "Other", "urgency": "normal", "reason": "Career center newsletter; mass email"}
