@@ -1,0 +1,31 @@
+{"id": "l01", "items": [{"type": "I_OWE", "what": "Send the v3 landscape doc to Lena", "who": "Lena", "who_type": "client", "due": "2026-11-19"}]}
+{"id": "l02", "items": [{"type": "I_OWE", "what": "Draft the quiz 5 suggestion and send it to Prof. Alder", "who": "Prof. Alder", "who_type": "instructor", "due": "2026-11-20"}]}
+{"id": "l03", "items": [{"type": "I_OWE", "what": "Take the intro section of the group project and have it done", "who": null, "who_type": "teammate", "due": "2026-11-22"}]}
+{"id": "l04", "items": [{"type": "I_OWE", "what": "Post the student's makeup quiz grade", "who": "student", "who_type": "student", "due": "2026-11-23"}]}
+{"id": "l05", "items": [{"type": "I_OWE", "what": "Share the midterm with DSP at least 4 days before the Nov 20 exam", "who": "DSP", "who_type": "other", "due": "2026-11-16"}]}
+{"id": "l06", "items": [{"type": "I_OWE", "what": "Send the SOW redline to Priya", "who": "Priya", "who_type": "client", "due": "2026-11-17"}, {"type": "I_OWE", "what": "Set up a call with Priya for next week", "who": "Priya", "who_type": "client", "due": null}]}
+{"id": "l07", "items": [{"type": "I_OWE", "what": "Check with Prof. Alder about the extension and get back to the student", "who": "student", "who_type": "student", "due": null}]}
+{"id": "l08", "items": [{"type": "I_OWE", "what": "Record credit for the reflection once it is seen in the portal", "who": "student", "who_type": "student", "due": null}]}
+{"id": "l09", "items": [{"type": "WAITING_ON", "what": "Signed agreement", "who": null, "who_type": "client", "due": "2026-11-20"}]}
+{"id": "l10", "items": [{"type": "I_OWE", "what": "Book the room for Tuesday's review session", "who": null, "who_type": "teammate", "due": "2026-11-17"}]}
+{"id": "l11", "items": []}
+{"id": "l12", "items": []}
+{"id": "l13", "items": []}
+{"id": "l14", "items": []}
+{"id": "l15", "items": []}
+{"id": "l16", "items": []}
+{"id": "l17", "items": [{"type": "I_OWE", "what": "Send the revised timeline to Northwind", "who": "Northwind", "who_type": "client", "due": "2026-11-18"}]}
+{"id": "l18", "items": [{"type": "I_OWE", "what": "Do the lit review for the Group 7 workbook", "who": "Group 7", "who_type": "teammate", "due": "2026-11-22"}]}
+{"id": "l19", "items": [{"type": "I_OWE", "what": "Run the quiz-prep survey in section next week", "who": "Prof. Alder", "who_type": "instructor", "due": null}]}
+{"id": "l20", "items": []}
+{"id": "l21", "items": []}
+{"id": "l22", "items": [{"type": "I_OWE", "what": "Send the stakeholder map to Lena", "who": "Lena", "who_type": "client", "due": "2026-12-01"}]}
+{"id": "l23", "items": []}
+{"id": "l24", "items": [{"type": "I_OWE", "what": "Email the professor the final deck", "who": "professor", "who_type": "instructor", "due": "2026-11-20"}]}
+{"id": "l25", "items": [{"type": "WAITING_ON", "what": "Survey data for the Northwind work", "who": "Jess", "who_type": "client", "due": null}, {"type": "I_OWE", "what": "Fold the survey data into v4 once it lands", "who": "Jess", "who_type": "client", "due": null}]}
+{"id": "l26", "close": true}
+{"id": "l27", "close": false}
+{"id": "l28", "close": false}
+{"id": "l29", "close": true}
+{"id": "l30", "close": true}
+{"id": "l31", "close": false}

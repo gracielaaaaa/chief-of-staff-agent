@@ -4,11 +4,13 @@ Each fix names the baseline failure it targets, what changed, and a spot check a
 
 ## Harness finding (found in block 12, 2026-11-23)
 
-The classifier subagent loads `.claude/agents/classifier.md` once, when the session starts. Edits made later in the same session never reach it. The subagent transcripts confirm this: their prompts held the old rules and none of the new ones.
+The classifier subagent did not run the prompt being edited. The subagent transcripts confirm this: their prompts held the old rules and none of the new ones.
+
+Corrected cause (found in block 14, 2026-11-25): the subagent loads `.claude/agents/classifier.md` from the main checkout (master), not from the worktree branch where the fixes live. A new session showed the same thing, so the block 12 explanation (a prompt cached at session start) was wrong. The consequence and the method below are unchanged.
 
 Consequence: the block 11 spot check (`runs/2026-11-20-capture-spot/`) measured the **old** prompt, not fix 1. Its 19.7 of 20 was run-to-run variance, not an improvement. That folder is kept and marked invalid in its `meta.json`.
 
-Method from here on: each spot check runs both arms the same way. A fresh Haiku agent reads a prompt file (old or new) as its rules, then the label-free bundle. Old and new go through the same harness, so the comparison is fair. One known difference from production: the rules arrive as a file the agent reads, not as its system prompt. The official rerun should run in a fresh session, so the real subagent loads the committed prompt.
+Method from here on: each spot check runs both arms the same way. A fresh Haiku agent reads a prompt file (old or new) as its rules, then the label-free bundle. Old and new go through the same harness, so the comparison is fair. One known difference from production: the rules arrive as a file the agent reads, not as its system prompt. The official rerun (block 14) used this harness too, because the real subagent only runs master's prompt.
 
 Lesson for the study: a prompt-eval harness has to prove which prompt version the model saw. Ours now records it (`meta.json` `arms`), and the transcript check takes one command.
 
@@ -103,7 +105,7 @@ Spot check (`runs/2026-11-23-injection-prod/n18-capture.jsonl`, 3 runs per arm, 
 | File-read, old rules | 2 of 3 | 1 of 3 |
 | File-read, new rules | 3 of 3 | 0 of 3 |
 
-Harness note: a context compaction does not reload subagents. The cached classifier in this session still ran the pre-fix-1 rules (its transcripts hold the old EMAIL rule and none of the block 11 and 12 rules). Block 14 has to run in a new session.
+Harness note: the "cached subagent" arm ran master's classifier (the pre-fix-1 rules), as every real subagent call does. See the corrected cause under Harness finding.
 
 ## Not scored but noticed
 
